@@ -3,12 +3,13 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	1.1
-Release:	0.%{snap}.1
+Release:	0.%{snap}.2
 Epoch:		1
 License:	BSD
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/opencvlibrary/%{name}-%{version}%{snap}.tar.gz
 # Source0-md5:	b147b7cd3c059831c415c5a2bcecdf95
+Patch0:		%{name}-ffmpeg.patch
 URL:		http://opencv.willowgarage.com
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -19,6 +20,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw1394-devel
 BuildRequires:	libtiff-devel
+BuildRequires:	libtool
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	swig-python
@@ -64,8 +66,17 @@ OpenCV Python bindings.
 
 %prep
 %setup -q -n %{name}-%{version}.0
+%patch0 -p0
+
+sed -i -e 's#ACLOCAL_AMFLAGS.*##g' Makefile.am
+sed -i -e 's#pkgpython#pkgpyexec#g' interfaces/swig/python/Makefile.am
+sed -i -e 's#-L$(SWIG_PYTHON_LIBS)#$(NOTING_NOT_EMPTY_LINE)#g' interfaces/swig/python/Makefile.am
 
 %build
+%{__libtoolize}
+%{__aclocal} -I autotools/aclocal
+%{__autoconf}
+%{__automake}
 %configure \
 %ifarch i686 pentium4 athlon %{x8664}
 	--enable-sse2 \
@@ -73,7 +84,7 @@ OpenCV Python bindings.
 	--disable-sse2 \
 %endif
 	--with-python \
-	--with%{!?with_xine:-out}-xine \
+	--with%{!?with_xine:out}-xine \
 	--with-ffmpeg \
 	--with-1394libs \
 	--with-v4l \
