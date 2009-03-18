@@ -21,6 +21,7 @@ BuildRequires:	libraw1394-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
+BuildRequires:	swig-python
 BuildRequires:	zlib-devel
 %pyrequires_eq	python-libs
 %{?with_xine:BuildRequires:	xine-lib-devel}
