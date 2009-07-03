@@ -3,7 +3,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	1.1
-Release:	0.%{snap}.3
+Release:	0.%{snap}.4
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -60,7 +60,7 @@ This package contains the static library used for development.
 Summary:	OpenCV Python bindings
 Group:		Development/Languages/Python
 %pyrequires_eq  python
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description -n python-opencv
 OpenCV Python bindings.
