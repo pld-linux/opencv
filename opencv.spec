@@ -3,7 +3,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	1.1
-Release:	0.%{snap}.4
+Release:	0.%{snap}.5
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -11,6 +11,7 @@ Source0:	http://dl.sourceforge.net/opencvlibrary/%{name}-%{version}%{snap}.tar.g
 # Source0-md5:	b147b7cd3c059831c415c5a2bcecdf95
 Patch0:		%{name}-ffmpeg.patch
 Patch1:		%{name}-am.patch
+Patch2:		%{name}-build.patch
 URL:		http://opencv.willowgarage.com
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -69,6 +70,7 @@ OpenCV Python bindings.
 %setup -q -n %{name}-%{version}.0
 %patch0 -p0
 %patch1 -p1
+%patch2 -p1
 
 sed -i -e 's#ACLOCAL_AMFLAGS.*##g' Makefile.am
 sed -i -e 's#pkgpython#pkgpyexec#g' interfaces/swig/python/Makefile.am
