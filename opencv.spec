@@ -3,7 +3,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	1.1
-Release:	0.%{snap}.5
+Release:	0.%{snap}.6
 Epoch:		1
 License:	BSD
 Group:		Libraries
