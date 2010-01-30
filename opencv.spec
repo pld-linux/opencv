@@ -23,6 +23,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libraw1394-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
+BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	swig-python
