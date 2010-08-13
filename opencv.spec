@@ -2,7 +2,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	2.1.0
-Release:	0.1
+Release:	1
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -83,6 +83,7 @@ OpenCV Python bindings.
 install -d build
 cd build
 %cmake \
+	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
 %ifarch i686 pentium4 athlon %{x8664}
 	-DENABLE_SSE2=ON \
 %endif
@@ -94,9 +95,9 @@ cd build
 	-DWITH_1394=ON \
 	-DWITH_FFMPEG=ON \
 	-DWITH_GTK=ON \
-	-DWITH_V4L=PN \
+	-DWITH_V4L=ON \
 %if "%{_lib}" == "lib64"
-		-DLIB_SUFFIX=64 \
+	-DLIB_SUFFIX=64 \
 %endif
 	../
 
@@ -109,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
+install build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -117,25 +121,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog THANKS TODO
-%doc docs/*.{htm,rtf,png,txt} docs/papers docs/ref
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*so.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib*.so.2
+%attr(755,root,root) %ghost %{_libdir}/lib*.so.2.1
+%dir %{_datadir}/opencv
+%{_datadir}/opencv/doc
+%{_datadir}/opencv/haarcascades
+%{_datadir}/opencv/lbpcascades
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
 %{_includedir}/opencv
+%{_datadir}/opencv/OpenCVConfig.cmake
 %{_pkgconfigdir}/*.pc
 
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/lib*.a
+#%files static
+#%defattr(644,root,root,755)
+#%{_libdir}/lib*.a
 
 %files -n python-opencv
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/opencv
-%attr(755,root,root) %{py_sitedir}/opencv/*.so
-%{py_sitedir}/opencv/*.py[co]
+%attr(755,root,root) %{py_sitedir}/cv.so
