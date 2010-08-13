@@ -1,20 +1,18 @@
 %bcond_with	xine
-%define	snap	pre1
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
-Version:	1.1
-Release:	0.%{snap}.6
+Version:	2.1.0
+Release:	0.1
 Epoch:		1
 License:	BSD
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/opencvlibrary/%{name}-%{version}%{snap}.tar.gz
-# Source0-md5:	b147b7cd3c059831c415c5a2bcecdf95
-Patch0:		%{name}-ffmpeg.patch
-Patch1:		%{name}-am.patch
-Patch2:		%{name}-build.patch
+Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
+# Source0-md5:	1d71584fb4e04214c0085108f95e24c8
+Patch0:		%{name}-2.0.0-libpng14.patch
+Patch1:		%{name}-2.1.0-mmap.patch
+Patch2:		%{name}-2.1.0-multilib.patch
 URL:		http://opencv.willowgarage.com
-BuildRequires:	autoconf >= 2.53
-BuildRequires:	automake
+BuildRequires:	cmake
 BuildRequires:	ffmpeg-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libdc1394-devel
@@ -68,40 +66,39 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 OpenCV Python bindings.
 
 %prep
-%setup -q -n %{name}-%{version}.0
+%setup -q -n OpenCV-%{version}
 %patch0 -p0
-%patch1 -p1
+%patch1 -p0
 %patch2 -p1
 
-sed -i -e 's#ACLOCAL_AMFLAGS.*##g' Makefile.am
-sed -i -e 's#pkgpython#pkgpyexec#g' interfaces/swig/python/Makefile.am
-sed -i -e 's#-L$(SWIG_PYTHON_LIBS)#$(NOTING_NOT_EMPTY_LINE)#g' interfaces/swig/python/Makefile.am
-
 %build
-%{__libtoolize}
-%{__aclocal} -I autotools/aclocal
-%{__autoconf}
-%{__automake}
-%configure \
+install -d build
+cd build
+%cmake \
+	-DCXXFLAGS="-D__STDC_CONSTANT_MACROS" \
 %ifarch i686 pentium4 athlon %{x8664}
-	--enable-sse2 \
-%else
-	--disable-sse2 \
+	-DENABLE_SSE2=ON \
 %endif
-	--with-python \
-	--with%{!?with_xine:out}-xine \
-	--with-ffmpeg \
-	--with-1394libs \
-	--with-v4l \
-	--with-gtk \
-	--without-gstreamer \
-	--without-quicktime
-%{__make}
+	-DBUILD_NEW_PYTHON_SUPPORT=ON \
+%if %{with xine}
+	-DWITH_XINE=ON \
+%endif
+	-DWITH_GSTREAMER=OFF \
+	-DWITH_1394=ON \
+	-DWITH_FFMPEG=ON \
+	-DWITH_GTK=ON \
+	-DWITH_V4L=PN \
+%if "%{_lib}" == "lib64"
+		-DLIB_SUFFIX=64 \
+%endif
+	../
+%{__make} \
+	VERBOSE=1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
