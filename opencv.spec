@@ -1,3 +1,6 @@
+#
+# TODO: re-enable static libs
+#
 %bcond_with	xine
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
