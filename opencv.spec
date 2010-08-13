@@ -11,6 +11,7 @@ Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz
 Patch0:		%{name}-2.0.0-libpng14.patch
 Patch1:		%{name}-2.1.0-mmap.patch
 Patch2:		%{name}-2.1.0-multilib.patch
+Patch3:		%{name}-cflags.patch
 URL:		http://opencv.willowgarage.com
 BuildRequires:	cmake
 BuildRequires:	ffmpeg-devel
@@ -67,15 +68,21 @@ OpenCV Python bindings.
 
 %prep
 %setup -q -n OpenCV-%{version}
+
+%undos src/ml/CMakeLists.txt
+%undos CMakeLists.txt
+%undos src/cv/CMakeLists.txt
+%undos src/cxcore/CMakeLists.txt
+
 %patch0 -p0
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 %build
 install -d build
 cd build
 %cmake \
-	-DCXXFLAGS="-D__STDC_CONSTANT_MACROS" \
 %ifarch i686 pentium4 athlon %{x8664}
 	-DENABLE_SSE2=ON \
 %endif
@@ -92,6 +99,7 @@ cd build
 		-DLIB_SUFFIX=64 \
 %endif
 	../
+
 %{__make} \
 	VERBOSE=1
 
