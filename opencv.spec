@@ -5,7 +5,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	2.1.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -33,6 +33,8 @@ BuildRequires:	zlib-devel
 %pyrequires_eq	python-libs
 %{?with_xine:BuildRequires:	xine-lib-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		skip_post_check_so	libhighgui.so.%{version}
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
