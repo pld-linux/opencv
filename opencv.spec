@@ -4,17 +4,16 @@
 %bcond_with	xine
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
-Version:	2.1.0
-Release:	2
+Version:	2.2.0
+Release:	1
 Epoch:		1
 License:	BSD
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
-# Source0-md5:	1d71584fb4e04214c0085108f95e24c8
-Patch0:		%{name}-2.0.0-libpng14.patch
-Patch1:		%{name}-2.1.0-mmap.patch
-Patch2:		%{name}-2.1.0-multilib.patch
-Patch3:		%{name}-cflags.patch
+# Source0-md5:	122c9ac793a46854ef2819fedbbd6b1b
+Patch0:		%{name}-multilib.patch
+Patch1:		%{name}-cflags.patch
+Patch2:		%{name}-link.patch
 URL:		http://opencv.willowgarage.com
 BuildRequires:	cmake
 BuildRequires:	ffmpeg-devel
@@ -28,6 +27,8 @@ BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.577
+BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
 BuildRequires:	zlib-devel
 %pyrequires_eq	python-libs
@@ -74,21 +75,16 @@ OpenCV Python bindings.
 %prep
 %setup -q -n OpenCV-%{version}
 
-%undos src/ml/CMakeLists.txt
-%undos CMakeLists.txt
-%undos src/cv/CMakeLists.txt
-%undos src/cxcore/CMakeLists.txt
+%undos modules/gpu/CMakeLists.txt
 
-%patch0 -p0
-%patch1 -p0
+%patch0 -p1
+%patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 install -d build
 cd build
 %cmake \
-	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
 %ifarch i686 pentium4 athlon %{x8664}
 	-DENABLE_SSE2=ON \
 %endif
@@ -101,9 +97,6 @@ cd build
 	-DWITH_FFMPEG=ON \
 	-DWITH_GTK=ON \
 	-DWITH_V4L=ON \
-%if "%{_lib}" == "lib64"
-	-DLIB_SUFFIX=64 \
-%endif
 	../
 
 %{__make} \
@@ -128,7 +121,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*so.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib*.so.2.1
 %dir %{_datadir}/opencv
 %{_datadir}/opencv/doc
 %{_datadir}/opencv/haarcascades
