@@ -75,6 +75,7 @@ OpenCV Python bindings.
 %prep
 %setup -q -n OpenCV-%{version}
 
+%undos CMakeLists.txt
 %undos modules/gpu/CMakeLists.txt
 
 %patch0 -p1
