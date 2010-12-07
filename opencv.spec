@@ -5,7 +5,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	2.2.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -131,6 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_includedir}/opencv
+%{_includedir}/opencv2
 %{_datadir}/opencv/OpenCVConfig.cmake
 %{_pkgconfigdir}/*.pc
 
