@@ -1,7 +1,7 @@
 http://www.libpng.org/pub/png/src/libpng-1.2.x-to-1.4.x-summary.txt
 
---- src/highgui/grfmt_png.cpp
-+++ src/highgui/grfmt_png.cpp
+--- modules/highgui/src/grfmt_png.cpp
++++ modules/highgui/srcgrfmt_png.cpp
 @@ -223,7 +223,7 @@
                  png_set_palette_to_rgb( png_ptr );
  
