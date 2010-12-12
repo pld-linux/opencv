@@ -5,7 +5,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Name:		opencv
 Version:	2.2.0
-Release:	4
+Release:	5
 Epoch:		1
 License:	BSD
 Group:		Libraries
@@ -111,6 +111,11 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 install build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
+
+%if %{_lib} = "lib64"
+# upstream has no lib64 support
+mv $RPM_BUILD_ROOT%{_prefix}/lib/lib*.so* $RPM_BUILD_ROOT%{_libdir}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
