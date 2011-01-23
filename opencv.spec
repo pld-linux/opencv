@@ -127,21 +127,27 @@ Wiązania Pythona do OpenCV.
 install -d build
 cd build
 %cmake .. \
-%ifarch i686 pentium4 athlon %{x8664}
+	-DCMAKE_C_FLAGS_RELEASE="-DNDEBUG" \
+	-DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG" \
+%ifarch pentium4 %{x8664}
+	-DENABLE_SSE=ON \
 	-DENABLE_SSE2=ON \
+%else
+	-DENABLE_SSE=OFF \
+	-DENABLE_SSE2=OFF \
 %endif
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
-%if %{with xine}
-	-DWITH_XINE=ON \
-%endif
-	-DWITH_GSTREAMER=OFF \
+	-DUSE_O3=OFF \
 	-DWITH_1394=ON \
 	-DWITH_FFMPEG=ON \
+	-DWITH_GSTREAMER=OFF \
 	-DWITH_GTK=ON \
-	-DWITH_V4L=ON
+	-DWITH_V4L=ON \
+%if %{with xine}
+	-DWITH_XINE=ON
+%endif
 
-%{__make} \
-	VERBOSE=1
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
