@@ -1,6 +1,8 @@
 #
 # Conditional build:
-%bcond_with	gstreamer	# GStreamer support
+%bcond_without	gstreamer	# GStreamer support
+%bcond_with	pvapi		# PvAPI (AVT GigE cameras) support
+%bcond_with	unicap		# Unicap support (GPL)
 %bcond_with	xine		# XINE support (GPL)
 #
 Summary:	A library of programming functions mainly aimed at real time computer vision
@@ -9,7 +11,11 @@ Name:		opencv
 Version:	2.2.0
 Release:	6
 Epoch:		1
+%if %{with unicap} || %{with xine}
+License:	GPL (enforced by used libraries), BSD (opencv itself)
+%else
 License:	BSD
+%endif
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
 # Source0-md5:	122c9ac793a46854ef2819fedbbd6b1b
@@ -17,6 +23,7 @@ Patch0:		%{name}-multilib.patch
 Patch1:		%{name}-cflags.patch
 Patch2:		%{name}-link.patch
 URL:		http://opencv.willowgarage.com/
+%{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
@@ -34,6 +41,10 @@ BuildRequires:	libraw1394-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
+%if %{with unicap}
+BuildRequires:	libucil-devel
+BuildRequires:	libunicap-devel
+%endif
 BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python-devel
@@ -45,17 +56,12 @@ BuildRequires:	swig-python
 BuildRequires:	zlib-devel
 %{?with_xine:BuildRequires:	xine-lib-devel}
 # TODO:
-# - unicap (libunicap, libucil)
-# - gstreamer
-# - pvapi (PvApi.h)
 # - Qt (bcond replacing GTK+?)
 # - tbb (tbb.pc)
 # - cuda (on bcond)
 # - eigen2/eigen3 (Eigen/Core headers)
 # - ipp (libippi)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		skip_post_check_so	libhighgui.so.%{version}
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -138,14 +144,10 @@ cd build
 %endif
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
 	-DUSE_O3=OFF \
-	-DWITH_1394=ON \
-	-DWITH_FFMPEG=ON \
-	-DWITH_GSTREAMER=OFF \
-	-DWITH_GTK=ON \
-	-DWITH_V4L=ON \
-%if %{with xine}
-	-DWITH_XINE=ON
-%endif
+	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
+	%{!?with_pvapi:-DWITH_PVAPI=OFF} \
+	%{?with_unicap:-DWITH_UNICAP=ON} \
+	%{?with_xine:-DWITH_XINE=ON}
 
 %{__make}
 
