@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_without	gstreamer	# GStreamer support
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support
+%bcond_with	tbb		# Threading Building Blocks support
 %bcond_with	unicap		# Unicap support (GPL)
 %bcond_with	xine		# XINE support (GPL)
 #
@@ -22,11 +23,13 @@ Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz
 Patch0:		%{name}-multilib.patch
 Patch1:		%{name}-cflags.patch
 Patch2:		%{name}-link.patch
+Patch3:		%{name}-unicap-c++.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
+BuildRequires:	eigen >= 2
 BuildRequires:	ffmpeg-devel
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
@@ -53,13 +56,12 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.577
 BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
+%{?with_tbb:BuildRequires:	tbb-devel}
 BuildRequires:	zlib-devel
 %{?with_xine:BuildRequires:	xine-lib-devel}
 # TODO:
 # - Qt (bcond replacing GTK+?)
-# - tbb (tbb.pc)
 # - cuda (on bcond)
-# - eigen2/eigen3 (Eigen/Core headers)
 # - ipp (libippi)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -128,6 +130,7 @@ Wiązania Pythona do OpenCV.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 install -d build
@@ -146,6 +149,7 @@ cd build
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{!?with_pvapi:-DWITH_PVAPI=OFF} \
+	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
 	%{?with_xine:-DWITH_XINE=ON}
 
