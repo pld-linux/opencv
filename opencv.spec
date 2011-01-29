@@ -1,7 +1,9 @@
+# TODO: CUDA support (on bcond)
 #
 # Conditional build:
 %bcond_without	gstreamer	# GStreamer support
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support
+%bcond_with	qt		# Qt backend instead of GTK+
 %bcond_with	tbb		# Threading Building Blocks support
 %bcond_with	unicap		# Unicap support (GPL)
 %bcond_with	xine		# XINE support (GPL)
@@ -36,7 +38,6 @@ BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
 %endif
 BuildRequires:	jasper-devel
-BuildRequires:	gtk+2-devel
 BuildRequires:	libdc1394-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -59,10 +60,16 @@ BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
 BuildRequires:	zlib-devel
 %{?with_xine:BuildRequires:	xine-lib-devel}
-# TODO:
-# - Qt (bcond replacing GTK+?)
-# - cuda (on bcond)
-# - ipp (libippi)
+%if %{with qt}
+BuildRequires:	OpenGL-devel
+BuildRequires:	QtCore-devel >= 4
+BuildRequires:	QtGui-devel >= 4
+BuildRequires:	QtOpenGL-devel >= 4
+BuildRequires:	qt4-qmake >= 4
+%else
+BuildRequires:	gtk+2-devel >= 2.0
+%endif
+# ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -149,6 +156,7 @@ cd build
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{!?with_pvapi:-DWITH_PVAPI=OFF} \
+	%{?with_qt:-DWITH_QT=ON -DWITH_QT_OPENGL=ON -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
 	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
 	%{?with_xine:-DWITH_XINE=ON}
