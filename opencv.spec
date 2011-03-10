@@ -12,7 +12,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.2.0
-Release:	6
+Release:	7
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -26,6 +26,7 @@ Patch0:		%{name}-multilib.patch
 Patch1:		%{name}-cflags.patch
 Patch2:		%{name}-link.patch
 Patch3:		%{name}-unicap-c++.patch
+Patch4:		%{name}-c.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
@@ -138,6 +139,7 @@ Wiązania Pythona do OpenCV.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 install -d build

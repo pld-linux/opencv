@@ -1,0 +1,21 @@
+--- OpenCV-2.2.0/modules/legacy/include/opencv2/legacy/blobtrack.hpp.orig	2010-12-05 04:35:25.000000000 +0100
++++ OpenCV-2.2.0/modules/legacy/include/opencv2/legacy/blobtrack.hpp	2011-03-09 19:14:52.579414618 +0100
+@@ -47,6 +47,9 @@
+ //#if _MSC_VER >= 1200
+ 
+ #include "opencv2/core/core_c.h"
++
++#ifdef __cplusplus
++
+ #include <stdio.h>
+ 
+ #if _MSC_VER >= 1200 || defined __BORLANDC__
+@@ -943,6 +946,8 @@
+ CV_EXPORTS void cvTestSeqAddIntensityVariation(CvTestSeq* pTestSeq, float DI_per_frame, float MinI, float MaxI);
+ CV_EXPORTS void cvTestSeqSetFrame(CvTestSeq* pTestSeq, int n);
+ 
++#endif /* __cplusplus */
++
+ #endif
+ 
+ /* End of file. */
