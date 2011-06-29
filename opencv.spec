@@ -6,6 +6,7 @@
 %bcond_with	qt		# Qt backend instead of GTK+
 %bcond_with	tbb		# Threading Building Blocks support
 %bcond_with	unicap		# Unicap support (GPL)
+%bcond_with	v4l		# Video4Linux (even V4L2 support currently relies on V4L1 API)
 %bcond_with	xine		# XINE support (GPL)
 #
 Summary:	A library of programming functions mainly aimed at real time computer vision
@@ -27,13 +28,15 @@ Patch1:		%{name}-cflags.patch
 Patch2:		%{name}-link.patch
 Patch3:		%{name}-unicap-c++.patch
 Patch4:		%{name}-c.patch
+Patch5:		%{name}-gcc.patch
+Patch6:		%{name}-ffmpeg-0.8.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen >= 2
-BuildRequires:	ffmpeg-devel
+BuildRequires:	ffmpeg-devel >= 0.6
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
@@ -140,6 +143,8 @@ Wiązania Pythona do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 install -d build
@@ -161,6 +166,7 @@ cd build
 	%{?with_qt:-DWITH_QT=ON -DWITH_QT_OPENGL=ON -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
 	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
+	%{!?with_v4l:-DWITH_V4L=OFF} \
 	%{?with_xine:-DWITH_XINE=ON}
 
 %{__make}
