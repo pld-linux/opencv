@@ -28,16 +28,18 @@
  #else
          avcodec_decode_video(&video_st->codec,
                               picture, &got_picture,
-@@ -806,15 +813,15 @@
+@@ -806,15 +813,17 @@
  static const char * icvFFMPEGErrStr(int err)
  {
      switch(err) {
 -    case AVERROR_NUMEXPECTED:
 +    case AVERROR(EINVAL):
  		return "Incorrect filename syntax";
++#if (AVERROR_INVALIDDATA) != (AVERROR(EINVAL))
      case AVERROR_INVALIDDATA:
  		return "Invalid data in header";
 -    case AVERROR_NOFMT:
++#endif
 +    case AVERROR(EILSEQ):
  		return "Unknown format";
 -    case AVERROR_IO:
@@ -48,7 +50,7 @@
  		return "Memory allocation error";
      default:
  		break;
-@@ -899,7 +906,7 @@
+@@ -899,7 +908,7 @@
  #endif
  
  #if LIBAVFORMAT_BUILD > 4621
@@ -57,7 +59,7 @@
  #else
  	c->codec_id = oc->oformat->video_codec;
  #endif
-@@ -911,7 +918,7 @@
+@@ -911,7 +920,7 @@
      //if(codec_tag) c->codec_tag=codec_tag;
  	codec = avcodec_find_encoder(c->codec_id);
  
@@ -66,7 +68,7 @@
  
  	/* put sample parameters */
  	c->bit_rate = bitrate;
-@@ -998,7 +1005,7 @@
+@@ -998,7 +1007,7 @@
          AVPacket pkt;
          av_init_packet(&pkt);
  
@@ -75,7 +77,7 @@
          pkt.stream_index= video_st->index;
          pkt.data= (uint8_t *)picture;
          pkt.size= sizeof(AVPicture);
-@@ -1018,7 +1025,7 @@
+@@ -1018,7 +1027,7 @@
  			pkt.pts = c->coded_frame->pts;
  #endif
              if(c->coded_frame->key_frame)
@@ -84,7 +86,7 @@
              pkt.stream_index= video_st->index;
              pkt.data= outbuf;
              pkt.size= out_size;
-@@ -1215,7 +1222,7 @@
+@@ -1215,7 +1224,7 @@
  	av_register_all ();
  
  	/* auto detect the output format from the name and fourcc code. */
@@ -93,7 +95,7 @@
  	if (!fmt)
          return false;
  
-@@ -1238,7 +1245,7 @@
+@@ -1238,7 +1247,7 @@
  #endif
  
      // alloc memory for context
