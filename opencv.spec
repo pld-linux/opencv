@@ -13,7 +13,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.2.0
-Release:	8
+Release:	9
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -36,7 +36,7 @@ BuildRequires:	OpenEXR-devel
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen >= 2
-BuildRequires:	ffmpeg-devel >= 0.6
+BuildRequires:	ffmpeg-devel >= 0.7
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
