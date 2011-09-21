@@ -1,4 +1,6 @@
-# TODO: CUDA support (on bcond)
+#
+# TODO: - CUDA support (on bcond)
+#	- consider name change to OpenCV
 #
 # Conditional build:
 %bcond_without	gstreamer	# GStreamer support
@@ -12,8 +14,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.2.0
-Release:	10
+Version:	2.3.1
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -21,15 +23,13 @@ License:	GPL (enforced by used libraries), BSD (opencv itself)
 License:	BSD
 %endif
 Group:		Libraries
-Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
-# Source0-md5:	122c9ac793a46854ef2819fedbbd6b1b
-Patch0:		%{name}-multilib.patch
-Patch1:		%{name}-cflags.patch
-Patch2:		%{name}-link.patch
-Patch3:		%{name}-unicap-c++.patch
-Patch4:		%{name}-c.patch
-Patch5:		%{name}-gcc.patch
-Patch6:		%{name}-ffmpeg-0.8.patch
+Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}a.tar.bz2
+# Source0-md5:	82e4b6bfa349777233eea09b075e931e
+Patch0:		%{name}-cflags.patch
+Patch1:		%{name}-link.patch
+Patch2:		%{name}-unicap-c++.patch
+Patch3:		%{name}-c.patch
+Patch4:		%{name}-gcc.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
@@ -58,12 +58,12 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	python-numpy-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.577
+BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
-BuildRequires:	zlib-devel
 %{?with_xine:BuildRequires:	xine-lib-devel}
+BuildRequires:	zlib-devel
 %if %{with qt}
 BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel >= 4
@@ -143,8 +143,6 @@ Wiązania Pythona do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
 install -d build
@@ -195,20 +193,21 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/opencv_*
 %attr(755,root,root) %{_libdir}/libopencv_*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.2
-%dir %{_datadir}/opencv
-%doc %{_datadir}/opencv/doc
-%{_datadir}/opencv/haarcascades
-%{_datadir}/opencv/lbpcascades
+%attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.3
+%dir %{_datadir}/OpenCV
+%doc %{_datadir}/OpenCV/doc
+%{_datadir}/OpenCV/haarcascades
+%{_datadir}/OpenCV/lbpcascades
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
 %{_includedir}/opencv
 %{_includedir}/opencv2
-%{_datadir}/opencv/OpenCVConfig.cmake
+%{_datadir}/OpenCV/OpenCVConfig*.cmake
 %{_pkgconfigdir}/opencv.pc
 
 %files -n python-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/cv.so
+%attr(755,root,root) %{py_sitedir}/cv2.so
+%{py_sitedir}/cv.py
