@@ -1,6 +1,6 @@
---- OpenCV-2.1.0/CMakeLists.txt~	2010-08-13 12:44:23.367365865 +0200
-+++ OpenCV-2.1.0/CMakeLists.txt	2010-08-13 12:47:51.710667315 +0200
-@@ -708,6 +708,8 @@
+--- OpenCV-2.3.1/CMakeLists.txt.orig	2011-09-20 11:49:54.179110367 +0200
++++ OpenCV-2.3.1/CMakeLists.txt	2011-09-20 11:50:58.153269555 +0200
+@@ -1135,6 +1135,8 @@
  set(EXTRA_EXE_LINKER_FLAGS_RELEASE "")
  set(EXTRA_EXE_LINKER_FLAGS_DEBUG "")
  
@@ -9,18 +9,12 @@
  if(MSVC)
      set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS")
      # 64-bit portability warnings, in MSVC8
-@@ -916,16 +918,6 @@
+@@ -1174,10 +1176,6 @@
          set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Werror")
      endif()
  
--    if(X86)
--        if(NOT MINGW64)
--            if(NOT X86_64)
--                if(NOT APPLE)
--                    set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -march=i686")
--                endif()
--            endif()
--        endif()
+-    if(X86 AND NOT MINGW64 AND NOT X86_64 AND NOT APPLE)
+-        set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -march=i686")
 -    endif()
 -
      # Other optimizations
