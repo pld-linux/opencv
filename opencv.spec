@@ -30,6 +30,7 @@ Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
+Patch5:		%{name}-multilib.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
@@ -143,6 +144,7 @@ Wiązania Pythona do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 install -d build
