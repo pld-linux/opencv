@@ -1,6 +1,8 @@
 #
-# TODO: - CUDA support (on bcond)
-#	- consider name change to OpenCV
+# TODO:
+# - CUDA support (on bcond)
+# - OpenNI (http://openni.org/) + PrimeSensor module
+# - XIMEA? cmake file seems to be Win32-specific, but ximea.com has some Linux package
 #
 # Conditional build:
 %bcond_without	gstreamer	# GStreamer support
@@ -59,7 +61,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	python-numpy-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.600
+BuildRequires:	rpmbuild(macros) >= 1.606
 BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
@@ -150,8 +152,6 @@ Wiązania Pythona do OpenCV.
 install -d build
 cd build
 %cmake .. \
-	-DCMAKE_C_FLAGS_RELEASE="-DNDEBUG" \
-	-DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG" \
 %ifarch pentium4 %{x8664}
 	-DENABLE_SSE=ON \
 	-DENABLE_SSE2=ON \
@@ -180,6 +180,10 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 install build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
+%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
+%py_postclean
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -207,4 +211,4 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-opencv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/cv2.so
-%{py_sitedir}/cv.py
+%{py_sitedir}/cv.py[co]
