@@ -1,18 +1,26 @@
 #
 # TODO:
 # - CUDA support (on bcond)
-# - OpenNI (http://openni.org/) + PrimeSensor module
 # - XIMEA? cmake file seems to be Win32-specific, but ximea.com has some Linux package
 #
 # Conditional build:
-%bcond_without	gstreamer	# GStreamer support
-%bcond_with	pvapi		# PvAPI (AVT GigE cameras) support
-%bcond_with	qt		# Qt backend instead of GTK+
-%bcond_with	tbb		# Threading Building Blocks support
-%bcond_with	unicap		# Unicap support (GPL)
+%bcond_without	gstreamer	# GStreamer support in highgui
+%bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
+%bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui
+%bcond_with	qt		# Qt backend instead of GTK+ in highgui
+%bcond_with	tbb		# Threading Building Blocks support (everywhere)
+%bcond_with	unicap		# Unicap support in highgui (GPL)
 %bcond_with	v4l		# Video4Linux (even V4L2 support currently relies on V4L1 API)
-%bcond_with	xine		# XINE support (GPL)
+%bcond_with	xine		# XINE support in highgui (GPL)
+%bcond_with	sse		# use SSE instructions
+%bcond_with	sse2		# use SSE2 instructions
 #
+%ifarch pentium3 pentium4 %{x8664}
+%define		with_sse	1
+%endif
+%ifarch pentium4 %{x8664}
+%define		with_sse2	1
+%endif
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
@@ -36,6 +44,8 @@ Patch5:		%{name}-multilib.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
+# as of OpenCV 2.3.1 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
+%{?with_openni:BuildRequires:	OpenNI-devel}
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen >= 2
@@ -152,16 +162,12 @@ Wiązania Pythona do OpenCV.
 install -d build
 cd build
 %cmake .. \
-%ifarch pentium4 %{x8664}
-	-DENABLE_SSE=ON \
-	-DENABLE_SSE2=ON \
-%else
-	-DENABLE_SSE=OFF \
-	-DENABLE_SSE2=OFF \
-%endif
+	-DENABLE_SSE=%{?with_sse:ON}%{!?with_sse:OFF} \
+	-DENABLE_SSE2=%{?with_sse2:ON}%{!?with_sse2:OFF} \
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
+	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{!?with_pvapi:-DWITH_PVAPI=OFF} \
 	%{?with_qt:-DWITH_QT=ON -DWITH_QT_OPENGL=ON -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
 	%{?with_tbb:-DWITH_TBB=ON} \
