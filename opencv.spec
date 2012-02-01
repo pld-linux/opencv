@@ -1,19 +1,21 @@
 #
 # TODO:
 # - CUDA support (on bcond)
-# - XIMEA? cmake file seems to be Win32-specific, but ximea.com has some Linux package
 #
 # Conditional build:
-%bcond_without	gstreamer	# GStreamer support in highgui
-%bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
-%bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui
-%bcond_with	qt		# Qt backend instead of GTK+ in highgui
+# - general options:
 %bcond_with	tbb		# Threading Building Blocks support (everywhere)
-%bcond_with	unicap		# Unicap support in highgui (GPL)
-%bcond_with	v4l		# Video4Linux (even V4L2 support currently relies on V4L1 API)
-%bcond_with	xine		# XINE support in highgui (GPL)
 %bcond_with	sse		# use SSE instructions
 %bcond_with	sse2		# use SSE2 instructions
+# - highgui options:
+%bcond_without	gstreamer	# GStreamer support in highgui
+%bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
+%bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui (proprietary)
+%bcond_with	qt		# Qt backend instead of GTK+ in highgui
+%bcond_with	unicap		# Unicap support in highgui (GPL)
+%bcond_with	v4l		# Video4Linux in highgui (even V4L2 support currently relies on V4L1 API)
+%bcond_with	ximea		# m3API (XIMEA cameras) support in highgui (proprietary)
+%bcond_with	xine		# XINE support in highgui (GPL)
 #
 %ifarch pentium3 pentium4 %{x8664}
 %define		with_sse	1
@@ -41,11 +43,13 @@ Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-multilib.patch
+Patch6:		%{name}-ximea-linux.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
 # as of OpenCV 2.3.1 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
+%{?with_ximea:BuildRequires:	XIMEA-devel}
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen >= 2
@@ -157,6 +161,7 @@ Wiązania Pythona do OpenCV.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 install -d build
@@ -173,6 +178,7 @@ cd build
 	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
 	%{!?with_v4l:-DWITH_V4L=OFF} \
+	%{?with_ximea:-DWITH_XIMEA=ON} \
 	%{?with_xine:-DWITH_XINE=ON}
 
 %{__make}
