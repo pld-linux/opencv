@@ -1,10 +1,11 @@
---- OpenCV-2.2.0/CMakeLists.txt~	2010-12-07 11:47:33.354861668 +0100
-+++ OpenCV-2.2.0/CMakeLists.txt	2010-12-07 12:43:06.802865668 +0100
-@@ -429,6 +429,7 @@
-         endif()
-         if(WITH_V4L)
-             CHECK_MODULE(libv4l1 HAVE_LIBV4L)
-+	    CHECK_MODULE(libv4l2 HAVE_LIBV4L2)
-             CHECK_INCLUDE_FILE(linux/videodev.h HAVE_CAMV4L)
-             CHECK_INCLUDE_FILE(linux/videodev2.h HAVE_CAMV4L2)
-         else()
+diff -ur OpenCV-2.4.2.orig//cmake/OpenCVFindLibsVideo.cmake OpenCV-2.4.2/cmake/OpenCVFindLibsVideo.cmake
+--- OpenCV-2.4.2.orig//cmake/OpenCVFindLibsVideo.cmake	2012-07-09 23:47:24.910117311 +0000
++++ OpenCV-2.4.2/cmake/OpenCVFindLibsVideo.cmake	2012-07-09 23:48:25.689181021 +0000
+@@ -75,6 +75,7 @@
+ ocv_clear_vars(HAVE_LIBV4L HAVE_CAMV4L HAVE_CAMV4L2)
+ if(WITH_V4L)
+   CHECK_MODULE(libv4l1 HAVE_LIBV4L)
++  CHECK_MODULE(libv4l2 HAVE_LIBV4L2)
+   CHECK_INCLUDE_FILE(linux/videodev.h HAVE_CAMV4L)
+   CHECK_INCLUDE_FILE(linux/videodev2.h HAVE_CAMV4L2)
+ endif(WITH_V4L)

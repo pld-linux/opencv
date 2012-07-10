@@ -1,22 +1,23 @@
---- OpenCV-2.3.1/CMakeLists.txt.orig	2011-09-20 11:49:54.179110367 +0200
-+++ OpenCV-2.3.1/CMakeLists.txt	2011-09-20 11:50:58.153269555 +0200
-@@ -1135,6 +1135,8 @@
- set(EXTRA_EXE_LINKER_FLAGS_RELEASE "")
- set(EXTRA_EXE_LINKER_FLAGS_DEBUG "")
+diff -ur OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake OpenCV-2.4.2/cmake/OpenCVCompilerOptions.cmake
+--- OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake	2012-07-09 23:40:12.980147858 +0000
++++ OpenCV-2.4.2/cmake/OpenCVCompilerOptions.cmake	2012-07-09 23:46:59.773180868 +0000
+@@ -47,6 +47,8 @@
+   endif()
+ endmacro()
  
-+set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -D__STDC_CONSTANT_MACROS")
++add_extra_compiler_option(-D__STDC_CONSTANT_MACROS)
 +
- if(MSVC)
-     set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS")
-     # 64-bit portability warnings, in MSVC8
-@@ -1174,10 +1176,6 @@
-         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Werror")
-     endif()
+ if(MINGW)
+   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838
+   # here we are trying to workaround the problem
+@@ -105,10 +107,6 @@
+     add_extra_compiler_option(-Werror)
+   endif()
  
--    if(X86 AND NOT MINGW64 AND NOT X86_64 AND NOT APPLE)
--        set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -march=i686")
--    endif()
+-  if(X86 AND NOT MINGW64 AND NOT X86_64 AND NOT APPLE)
+-    add_extra_compiler_option(-march=i686)
+-  endif()
 -
-     # Other optimizations
-     if(USE_OMIT_FRAME_POINTER)
-         set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} -fomit-frame-pointer")
+   # Other optimizations
+   if(ENABLE_OMIT_FRAME_POINTER)
+     add_extra_compiler_option(-fomit-frame-pointer)
