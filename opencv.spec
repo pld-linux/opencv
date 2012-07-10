@@ -26,8 +26,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.3.1
-Release:	9
+Version:	2.4.2
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -35,15 +35,13 @@ License:	GPL (enforced by used libraries), BSD (opencv itself)
 License:	BSD
 %endif
 Group:		Libraries
-Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}a.tar.bz2
-# Source0-md5:	82e4b6bfa349777233eea09b075e931e
+Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
+# Source0-md5:	059ef86fc1724d69b75832a0d2929ff5
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
-Patch5:		%{name}-multilib.patch
-Patch6:		%{name}-ximea-linux.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
@@ -160,8 +158,6 @@ Wiązania Pythona do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
 install -d build
@@ -206,7 +202,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/opencv_*
 %attr(755,root,root) %{_libdir}/libopencv_*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.3
+%attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.4
 %dir %{_datadir}/OpenCV
 %doc %{_datadir}/OpenCV/doc
 %{_datadir}/OpenCV/haarcascades
