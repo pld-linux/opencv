@@ -1,5 +1,9 @@
 #
 # TODO:
+# - gtkglext ?
+# - OpenGL
+# - OpenCL
+# - Smartek GigEVisionSDK (http://www.smartekvision.com/ ?)
 # - CUDA support (on bcond)
 #
 # Conditional build:
@@ -26,8 +30,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.2
-Release:	4
+Version:	2.4.3
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -36,12 +40,13 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opencvlibrary/OpenCV-%{version}.tar.bz2
-# Source0-md5:	059ef86fc1724d69b75832a0d2929ff5
+# Source0-md5:	c0a5af4ff9d0d540684c0bf00ef35dbe
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
+Patch5:		%{name}-ximea.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
@@ -50,7 +55,7 @@ BuildRequires:	OpenEXR-devel
 %{?with_ximea:BuildRequires:	XIMEA-devel}
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
-BuildRequires:	eigen >= 2
+BuildRequires:	eigen3 >= 3
 BuildRequires:	ffmpeg-devel >= 0.7
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
@@ -158,6 +163,7 @@ Wiązania Pythona do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 install -d build
@@ -169,7 +175,7 @@ cd build
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
-	%{!?with_pvapi:-DWITH_PVAPI=OFF} \
+	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
 	%{?with_qt:-DWITH_QT=ON -DWITH_QT_OPENGL=ON -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
 	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
