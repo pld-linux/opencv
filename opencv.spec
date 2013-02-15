@@ -1,10 +1,9 @@
 #
 # TODO:
-# - gtkglext ?
-# - OpenGL
 # - OpenCL
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ ?)
 # - CUDA support (on bcond)
+# - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 #
 # Conditional build:
 # - general options:
@@ -13,6 +12,7 @@
 %bcond_with	sse2		# use SSE2 instructions
 # - highgui options:
 %bcond_without	gstreamer	# GStreamer support in highgui
+%bcond_without	opengl		# OpenGL support
 %bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui (proprietary)
 %bcond_with	qt		# Qt backend instead of GTK+ in highgui
@@ -50,7 +50,9 @@ Patch5:		%{name}-ximea.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 BuildRequires:	OpenEXR-devel
-# as of OpenCV 2.3.1 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
+%{?with_opengl:BuildRequires:	OpenGL-devel}
+%{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
+# as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel}
 BuildRequires:	cmake >= 2.4
@@ -85,15 +87,14 @@ BuildRequires:	swig-python
 %{?with_xine:BuildRequires:	xine-lib-devel}
 BuildRequires:	zlib-devel
 %if %{with qt}
-BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel >= 4
 BuildRequires:	QtGui-devel >= 4
-BuildRequires:	QtOpenGL-devel >= 4
+%{?with_opengl:BuildRequires:	QtOpenGL-devel >= 4}
 BuildRequires:	qt4-qmake >= 4
 %else
 BuildRequires:	gtk+2-devel >= 2.0
+%{?with_opengl:BuildRequires:	gtkglext-devel >= 1.0}
 %endif
-# ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -174,9 +175,10 @@ cd build
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
+	%{?with_opengl:-DWITH_OPENGL=ON} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
-	%{?with_qt:-DWITH_QT=ON -DWITH_QT_OPENGL=ON -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
+	%{?with_qt:-DWITH_QT=ON %{?with_opengl:-DWITH_QT_OPENGL=ON} -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
 	%{?with_tbb:-DWITH_TBB=ON} \
 	%{?with_unicap:-DWITH_UNICAP=ON} \
 	%{!?with_v4l:-DWITH_V4L=OFF} \
