@@ -1,6 +1,6 @@
 #
 # TODO:
-# - Smartek GigEVisionSDK (http://www.smartekvision.com/ ?)
+# - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - finish AMD OpenCL routines support
 # - CUDA support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
