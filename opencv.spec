@@ -1,7 +1,7 @@
 #
 # TODO:
-# - OpenCL
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ ?)
+# - finish AMD OpenCL routines support
 # - CUDA support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 #
@@ -10,9 +10,12 @@
 %bcond_with	tbb		# Threading Building Blocks support (everywhere)
 %bcond_with	sse		# use SSE instructions
 %bcond_with	sse2		# use SSE2 instructions
+%bcond_without	opencl		# OpenCL support
+%bcond_with	opencl_amdblas	# AMD OpenCL BLAS routines
+%bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
+%bcond_without	opengl		# OpenGL support
 # - highgui options:
 %bcond_without	gstreamer	# GStreamer support in highgui
-%bcond_without	opengl		# OpenGL support
 %bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui (proprietary)
 %bcond_with	qt		# Qt backend instead of GTK+ in highgui
@@ -49,6 +52,7 @@ Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-ximea.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
+%{?with_opencl:BuildRequires:	OpenCL-devel}
 BuildRequires:	OpenEXR-devel
 %{?with_opengl:BuildRequires:	OpenGL-devel}
 %{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
@@ -175,6 +179,9 @@ cd build
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
 	-DUSE_O3=OFF \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
+	%{?with_opencl:-DWITH_OPENCL=ON} \
+	%{?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=ON} \
+	%{?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=ON} \
 	%{?with_opengl:-DWITH_OPENGL=ON} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
