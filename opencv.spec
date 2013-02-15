@@ -1,7 +1,6 @@
 #
 # TODO:
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
-# - finish AMD OpenCL routines support
 # - CUDA support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 #
@@ -59,6 +58,8 @@ BuildRequires:	OpenEXR-devel
 # as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel}
+%{?with_opencl_amdblas:BuildRequires:	clAmdBlas-devel}
+%{?with_opencl_amdfft:BuildRequires:	clAmdFft-devel}
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
