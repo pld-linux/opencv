@@ -1,0 +1,11 @@
+--- OpenCV-2.4.3/modules/ocl/src/fft.cpp.orig	2012-10-23 00:55:11.000000000 +0200
++++ OpenCV-2.4.3/modules/ocl/src/fft.cpp	2013-02-16 08:52:00.733063588 +0100
+@@ -95,6 +95,8 @@
+             // if not, bake a new one, put it into the planStore and return it.
+             static clAmdFftPlanHandle getPlan(Size _dft_size, int _src_step, int _dst_step, int _flags, FftType _type);
+         };
++	void fft_setup();
++	void fft_teardown();
+     }
+ }
+ bool cv::ocl::FftPlan::started = false;
