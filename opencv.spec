@@ -14,6 +14,7 @@
 %bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
 %bcond_without	opengl		# OpenGL support
 # - highgui options:
+%bcond_without	ffmpeg		# FFMpeg support in highgui
 %bcond_without	gstreamer	# GStreamer support in highgui
 %bcond_with	openni		# OpenNI (Natural Interaction) support in highgui
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui (proprietary)
@@ -65,7 +66,7 @@ BuildRequires:	OpenEXR-devel
 BuildRequires:	cmake >= 2.4
 BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
-BuildRequires:	ffmpeg-devel >= 0.7
+%{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
@@ -183,6 +184,7 @@ cd build
 	-DENABLE_SSE2=%{?with_sse2:ON}%{!?with_sse2:OFF} \
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
 	-DUSE_O3=OFF \
+	%{?with_ffmpeg:-DWITH_FFMPEG=ON} \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{?with_opencl:-DWITH_OPENCL=ON} \
 	%{?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=ON} \
