@@ -51,7 +51,6 @@ Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-ximea.patch
 Patch6:		%{name}-ocl-fft.patch
-Patch7:		%{name}-ocl-blas.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -174,7 +173,6 @@ Wiązania Pythona do OpenCV.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-#%patch7 -p1
 
 %build
 install -d build
