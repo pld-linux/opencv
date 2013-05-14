@@ -13,6 +13,8 @@
 %bcond_with	opencl_amdblas	# AMD OpenCL BLAS routines
 %bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
 %bcond_without	opengl		# OpenGL support
+# - bindings
+%bcond_without	java		# Java binding
 # - highgui options:
 %bcond_without	ffmpeg		# FFMpeg support in highgui
 %bcond_without	gstreamer	# GStreamer support in highgui
@@ -60,9 +62,10 @@ BuildRequires:	OpenEXR-devel
 # as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel}
+%{?with_java:BuildRequires:	ant}
 %{?with_opencl_amdblas:BuildRequires:	clAmdBlas-devel}
 %{?with_opencl_amdfft:BuildRequires:	clAmdFft-devel}
-BuildRequires:	cmake >= 2.4
+BuildRequires:	cmake >= 2.8
 BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
@@ -71,6 +74,7 @@ BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
 %endif
 BuildRequires:	jasper-devel
+%{?with_java:BuildRequires:	jdk}
 BuildRequires:	libdc1394-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -84,6 +88,7 @@ BuildRequires:	libunicap-devel
 %endif
 BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
+BuildRequires:	python
 BuildRequires:	python-devel
 BuildRequires:	python-numpy-devel
 BuildRequires:	rpm-pythonprov
@@ -146,6 +151,19 @@ Header files for OpenCV library.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki OpenCV.
+
+%package -n java-opencv
+Summary:	OpenCV Java bindings
+Summary(pl.UTF-8):	Wiązania Javy do OpenCV
+Group:		Libraries/Java
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	jre
+
+%description -n java-opencv
+OpenCV Java bindings.
+
+%description -n java-opencv -l pl.UTF-8
+Wiązania Javy do OpenCV.
 
 %package -n python-opencv
 Summary:	OpenCV Python bindings
@@ -212,11 +230,23 @@ install build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 
+%if %{with java}
+# move to proper directories, create symlink
+install -d $RPM_BUILD_ROOT%{_javadir}
+%{__mv} $RPM_BUILD_ROOT%{_datadir}/OpenCV/java/libopencv_java*.so $RPM_BUILD_ROOT%{_libdir}
+%{__mv} $RPM_BUILD_ROOT%{_datadir}/OpenCV/java/opencv-*.jar $RPM_BUILD_ROOT%{_javadir}
+rmdir $RPM_BUILD_ROOT%{_datadir}/OpenCV/java
+ln -sf $(basename $RPM_BUILD_ROOT%{_javadir}/opencv-*.jar) $RPM_BUILD_ROOT%{_javadir}/opencv.jar
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
+
+%post   -n java-opencv -p /sbin/ldconfig
+%postun -n java-opencv -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -235,6 +265,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/opencv2
 %{_datadir}/OpenCV/OpenCVConfig*.cmake
 %{_pkgconfigdir}/opencv.pc
+
+%if %{with java}
+%files -n java-opencv
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libopencv_java245.so
+%{_javadir}/opencv-245.jar
+%{_javadir}/opencv.jar
+%endif
 
 %files -n python-opencv
 %defattr(644,root,root,755)
