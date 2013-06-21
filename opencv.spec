@@ -261,6 +261,9 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
+%if %{with java}
+%exclude %{_libdir}/libopencv_java245.so
+%endif
 %{_includedir}/opencv
 %{_includedir}/opencv2
 %{_datadir}/OpenCV/OpenCVConfig*.cmake
