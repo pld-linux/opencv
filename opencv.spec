@@ -110,6 +110,9 @@ BuildRequires:	gtk+2-devel >= 2.0
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# build broken, can't find g++
+%undefine	with_ccache
+
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
 functions mainly aimed at real time computer vision.
