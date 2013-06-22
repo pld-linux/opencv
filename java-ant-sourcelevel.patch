@@ -1,0 +1,14 @@
+--- opencv-2.4.5/modules/java/build.xml.in~	2013-04-05 12:00:20.000000000 +0300
++++ opencv-2.4.5/modules/java/build.xml.in	2013-06-21 20:08:55.908749180 +0300
+@@ -6,7 +6,10 @@
+     <!-- This is to make a jar with a source attachment, for e.g. easy -->
+     <!-- navigation in Eclipse. See this question: -->
+     <!-- http://stackoverflow.com/questions/3584968/ant-how-to-compile-jar-that-includes-source-attachment -->
+-    <javac sourcepath="" srcdir="src" destdir="src" debug="on" includeantruntime="false" >
++    <property name="javac.target" value="1.5"/>
++    <property name="javac.source" value="1.5"/>
++
++    <javac sourcepath="" srcdir="src" destdir="src" debug="on" includeantruntime="false" target="${javac.target}" source="${javac.source}">
+       <include name="**/*.java"/>
+       <compilerarg line="-encoding utf-8"/>
+     </javac>

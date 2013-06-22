@@ -25,7 +25,7 @@
 %bcond_with	v4l		# Video4Linux in highgui (even V4L2 support currently relies on V4L1 API)
 %bcond_with	ximea		# m3API (XIMEA cameras) support in highgui (proprietary)
 %bcond_with	xine		# XINE support in highgui (GPL)
-#
+
 %ifarch pentium3 pentium4 %{x8664}
 %define		with_sse	1
 %endif
@@ -36,7 +36,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.4.5
-Release:	2
+Release:	3
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -53,6 +53,7 @@ Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-ximea.patch
 Patch6:		%{name}-ocl-fft.patch
+Patch7:		java-ant-sourcelevel.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -191,6 +192,7 @@ Wiązania Pythona do OpenCV.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 install -d build
@@ -219,12 +221,11 @@ cd build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-install build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
+cp -p build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
