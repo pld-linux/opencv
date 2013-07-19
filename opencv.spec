@@ -208,8 +208,8 @@ cd build
 	%{?with_ffmpeg:-DWITH_FFMPEG=ON} \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{?with_opencl:-DWITH_OPENCL=ON} \
-	%{?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=ON} \
-	%{?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=ON} \
+	%{!?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=OFF} \
+	%{!?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=OFF} \
 	%{?with_opengl:-DWITH_OPENGL=ON} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
