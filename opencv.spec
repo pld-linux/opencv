@@ -36,7 +36,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.4.5
-Release:	4
+Release:	5
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -156,6 +156,29 @@ Header files for OpenCV library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki OpenCV.
 
+%package doc
+Summary:	Manual for OpenCV
+Summary(fr.UTF-8):	Documentation pour OpenCV
+Summary(it.UTF-8):	Documentazione di OpenCV
+Summary(pl.UTF-8):	Podręcznik dla OpenCV
+Group:		Documentation
+# noarch subpackages only when building with rpm5
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
+
+%description doc
+Documentation for OpenCV.
+
+%description doc -l fr.UTF-8
+Documentation pour OpenCV.
+
+%description doc -l it.UTF-8
+Documentazione di OpenCV.
+
+%description doc -l pl.UTF-8
+Dokumentacja do OpenCV.
+
 %package -n java-opencv
 Summary:	OpenCV Java bindings
 Summary(pl.UTF-8):	Wiązania Javy do OpenCV
@@ -227,6 +250,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# see -doc package
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/OpenCV/doc
+
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 cp -p build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
@@ -258,7 +284,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_*.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.4
 %dir %{_datadir}/OpenCV
-%doc %{_datadir}/OpenCV/doc
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
 
@@ -272,6 +297,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/opencv2
 %{_datadir}/OpenCV/OpenCVConfig*.cmake
 %{_pkgconfigdir}/opencv.pc
+
+%files doc
+%defattr(644,root,root,755)
+# TODO: probably could rebuild them and package via make install
+%doc doc/*
 
 %if %{with java}
 %files -n java-opencv
