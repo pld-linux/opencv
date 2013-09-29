@@ -35,8 +35,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.5
-Release:	5
+Version:	2.4.6
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -45,7 +45,7 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opencvlibrary/opencv-unix/%{version}/opencv-%{version}.tar.gz
-# Source0-md5:	8eac87462c7bec8b89021b723207c623
+# Source0-md5:	c5e8758a419b4f258611b17fc83aafaf
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -291,7 +291,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
 %if %{with java}
-%exclude %{_libdir}/libopencv_java245.so
+%exclude %{_libdir}/libopencv_java246.so
 %endif
 %{_includedir}/opencv
 %{_includedir}/opencv2
@@ -306,8 +306,8 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with java}
 %files -n java-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_java245.so
-%{_javadir}/opencv-245.jar
+%attr(755,root,root) %{_libdir}/libopencv_java246.so
+%{_javadir}/opencv-246.jar
 %{_javadir}/opencv.jar
 %endif
 
