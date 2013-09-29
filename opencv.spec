@@ -35,7 +35,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.6
+Version:	2.4.6.2
 Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
@@ -44,8 +44,8 @@ License:	GPL (enforced by used libraries), BSD (opencv itself)
 License:	BSD
 %endif
 Group:		Libraries
-Source0:	http://downloads.sourceforge.net/opencvlibrary/opencv-unix/%{version}/opencv-%{version}.tar.gz
-# Source0-md5:	c5e8758a419b4f258611b17fc83aafaf
+Source0:	https://github.com/Itseez/opencv/archive/%{version}.tar.gz
+# Source0-md5:	b9cb3420fa715c2e23f012d42a9b0988
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -58,8 +58,8 @@ URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
 BuildRequires:	OpenEXR-devel
-%{?with_opengl:BuildRequires:	OpenGL-devel}
 %{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
+%{?with_opengl:BuildRequires:	OpenGL-devel}
 # as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel}
@@ -197,7 +197,7 @@ Summary:	OpenCV Python bindings
 Summary(pl.UTF-8):	Wiązania Pythona do OpenCV
 Group:		Libraries/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%pyrequires_eq  python-libs
+Requires:	python-libs
 
 %description -n python-opencv
 OpenCV Python bindings.
