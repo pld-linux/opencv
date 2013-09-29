@@ -1,4 +1,3 @@
-#
 # TODO:
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - CUDA support (on bcond)
@@ -110,6 +109,8 @@ BuildRequires:	gtk+2-devel >= 2.0
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		sover	%(v=%{version}; k=${v#?.?.?}; echo ${v%$k})
+
 # build broken, can't find g++
 %undefine	with_ccache
 
@@ -142,6 +143,14 @@ Przykładowe zastosowania biblioteki OpenCV to
 - SFM (Structure From Motion)
 - kalibracja dwu- i wielokamerowa, obliczanie głębi
 - robotyka ruchu.
+
+%package core
+Summary:	OpenCV core libraries
+Group:		Libraries
+Conflicts:	%{name} < 2.4.6.2-1
+
+%description core
+This package contains the OpenCV C/C++ core libraries.
 
 %package devel
 Summary:	Header files for OpenCV library
@@ -275,17 +284,60 @@ rm -rf $RPM_BUILD_ROOT
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
+%post   core -p /sbin/ldconfig
+%postun core -p /sbin/ldconfig
+
 %post   -n java-opencv -p /sbin/ldconfig
 %postun -n java-opencv -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/opencv_*
-%attr(755,root,root) %{_libdir}/libopencv_*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_*.so.2.4
+%attr(755,root,root) %{_bindir}/opencv_createsamples
+%attr(755,root,root) %{_bindir}/opencv_haartraining
+%attr(755,root,root) %{_bindir}/opencv_performance
+%attr(755,root,root) %{_bindir}/opencv_traincascade
+%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.%{sover}
+%ghost %{_libdir}/libopencv_calib3d.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_contrib.so.%{sover}
+%ghost %{_libdir}/libopencv_contrib.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_features2d.so.%{sover}
+%ghost %{_libdir}/libopencv_features2d.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_highgui.so.%{sover}
+%ghost %{_libdir}/libopencv_highgui.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_legacy.so.%{sover}
+%ghost %{_libdir}/libopencv_legacy.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_objdetect.so.%{sover}
+%ghost %{_libdir}/libopencv_objdetect.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_stitching.so.%{sover}
+%ghost %{_libdir}/libopencv_stitching.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_ts.so.%{sover}
+%ghost %{_libdir}/libopencv_ts.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_superres.so.%{sover}
+%ghost %{_libdir}/libopencv_superres.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_videostab.so.%{sover}
+%ghost %{_libdir}/libopencv_videostab.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_gpu.so.%{sover}
+%ghost %{_libdir}/libopencv_gpu.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_nonfree.so.%{sover}
+%ghost %{_libdir}/libopencv_nonfree.so.2.4
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
+
+%files core
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libopencv_core.so.%{sover}
+%ghost %{_libdir}/libopencv_core.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_flann.so.%{sover}
+%ghost %{_libdir}/libopencv_flann.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_imgproc.so.%{sover}
+%ghost %{_libdir}/libopencv_imgproc.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_ml.so.%{sover}
+%ghost %{_libdir}/libopencv_ml.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_photo.so.%{sover}
+%ghost %{_libdir}/libopencv_photo.so.2.4
+%attr(755,root,root) %{_libdir}/libopencv_video.so.%{sover}
+%ghost %{_libdir}/libopencv_video.so.2.4
 
 %files devel
 %defattr(644,root,root,755)
