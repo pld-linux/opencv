@@ -1,6 +1,6 @@
 # TODO:
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
-# - CUDA support (on bcond)
+# - CUDA, CUFFT, CUBLAS, NVCUVID support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
 #
 # Conditional build:
@@ -8,10 +8,16 @@
 %bcond_with	tbb		# Threading Building Blocks support (everywhere)
 %bcond_with	sse		# use SSE instructions
 %bcond_with	sse2		# use SSE2 instructions
+%bcond_with	sse3		# use SSE3 instructions
+%bcond_with	ssse3		# use SSSE3 instructions
+%bcond_with	sse41		# use SSE4.1 instructions
+%bcond_with	sse42		# use SSE4.2 instructions
+%bcond_with	avx		# use AVX instructions
 %bcond_without	opencl		# OpenCL support
 %bcond_with	opencl_amdblas	# AMD OpenCL BLAS routines
 %bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
 %bcond_without	opengl		# OpenGL support
+%bcond_without	gomp		# OpenMP support
 # - bindings
 %bcond_without	java		# Java binding
 # - highgui options:
@@ -21,7 +27,7 @@
 %bcond_with	pvapi		# PvAPI (AVT GigE cameras) support in highgui (proprietary)
 %bcond_with	qt		# Qt backend instead of GTK+ in highgui
 %bcond_with	unicap		# Unicap support in highgui (GPL)
-%bcond_with	v4l		# Video4Linux in highgui (even V4L2 support currently relies on V4L1 API)
+%bcond_without	v4l		# Video4Linux in highgui
 %bcond_with	ximea		# m3API (XIMEA cameras) support in highgui (proprietary)
 %bcond_with	xine		# XINE support in highgui (GPL)
 
@@ -34,8 +40,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.6.2
-Release:	4
+Version:	2.4.8
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -44,7 +50,7 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}.tar.gz
-# Source0-md5:	b9cb3420fa715c2e23f012d42a9b0988
+# Source0-md5:	9b8f1426bc01a1ae1e8b3bce11dc1e1c
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -53,6 +59,7 @@ Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-ximea.patch
 Patch6:		%{name}-ocl-fft.patch
 Patch7:		java-ant-sourcelevel.patch
+Patch8:		%{name}-shared.patch
 URL:		http://opencv.willowgarage.com/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -61,7 +68,7 @@ BuildRequires:	OpenEXR-devel
 %{?with_opengl:BuildRequires:	OpenGL-devel}
 # as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
-%{?with_ximea:BuildRequires:	XIMEA-devel}
+%{?with_ximea:BuildRequires:	XIMEA-devel >= 4}
 %{?with_java:BuildRequires:	ant}
 %{?with_opencl_amdblas:BuildRequires:	clAmdBlas-devel}
 %{?with_opencl_amdfft:BuildRequires:	clAmdFft-devel}
@@ -69,6 +76,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
+%{?with_gomp:BuildRequires:	gcc-c++ >= 6:4.2}
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 0.10
 BuildRequires:	gstreamer-plugins-base-devel >= 0.10
@@ -76,6 +84,7 @@ BuildRequires:	gstreamer-plugins-base-devel >= 0.10
 BuildRequires:	jasper-devel
 %{?with_java:BuildRequires:	jdk}
 BuildRequires:	libdc1394-devel
+%{?with_gomp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw1394-devel
@@ -107,6 +116,7 @@ BuildRequires:	qt4-qmake >= 4
 BuildRequires:	gtk+2-devel >= 2.0
 %{?with_opengl:BuildRequires:	gtkglext-devel >= 1.0}
 %endif
+Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		sover	%(v=%{version}; k=${v#?.?.?}; echo ${v%$k})
@@ -146,11 +156,15 @@ Przykładowe zastosowania biblioteki OpenCV to
 
 %package core
 Summary:	OpenCV core libraries
+Summary(pl.UTF-8):	Podstawowe biblioteki OpenCV
 Group:		Libraries
-Conflicts:	%{name} < 2.4.6.2-1
+Conflicts:	opencv < 2.4.6.2-1
 
 %description core
 This package contains the OpenCV C/C++ core libraries.
+
+%description core -l pl.UTF-8
+Ten pakiet zawiera podstawowe biblioteki C/C++ OpenCV.
 
 %package devel
 Summary:	Header files for OpenCV library
@@ -228,21 +242,27 @@ Wiązania Pythona do OpenCV.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 install -d build
 cd build
 %cmake .. \
+	-DENABLE_AVX=%{?with_avx:ON}%{!?with_avx:OFF} \
 	-DENABLE_SSE=%{?with_sse:ON}%{!?with_sse:OFF} \
 	-DENABLE_SSE2=%{?with_sse2:ON}%{!?with_sse2:OFF} \
+	-DENABLE_SSE3=%{?with_sse3:ON}%{!?with_sse3:OFF} \
+	-DENABLE_SSSE3=%{?with_ssse3:ON}%{!?with_ssse3:OFF} \
+	-DENABLE_SSE41=%{?with_sse41:ON}%{!?with_sse41:OFF} \
+	-DENABLE_SSE42=%{?with_sse42:ON}%{!?with_sse42:OFF} \
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
-	-DUSE_O3=OFF \
 	%{?with_ffmpeg:-DWITH_FFMPEG=ON} \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{?with_opencl:-DWITH_OPENCL=ON} \
 	%{!?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=OFF} \
 	%{!?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=OFF} \
 	%{?with_opengl:-DWITH_OPENGL=ON} \
+	%{?with_gomp:-DWITH_OPENMP=ON} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
 	%{?with_qt:-DWITH_QT=ON %{?with_opengl:-DWITH_QT_OPENGL=ON} -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
@@ -297,29 +317,33 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_performance
 %attr(755,root,root) %{_bindir}/opencv_traincascade
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so.%{sover}
-%ghost %{_libdir}/libopencv_calib3d.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_contrib.so.%{sover}
-%ghost %{_libdir}/libopencv_contrib.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_contrib.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so.%{sover}
-%ghost %{_libdir}/libopencv_features2d.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_highgui.so.%{sover}
-%ghost %{_libdir}/libopencv_highgui.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_legacy.so.%{sover}
-%ghost %{_libdir}/libopencv_legacy.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_legacy.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_objdetect.so.%{sover}
-%ghost %{_libdir}/libopencv_objdetect.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.2.4
+%if %{with opencl}
+%attr(755,root,root) %{_libdir}/libopencv_ocl.so.%{sover}
+%attr(755,root,root) %ghost %{_libdir}/libopencv_ocl.so.2.4
+%endif
 %attr(755,root,root) %{_libdir}/libopencv_stitching.so.%{sover}
-%ghost %{_libdir}/libopencv_stitching.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_ts.so.%{sover}
-%ghost %{_libdir}/libopencv_ts.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_ts.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_superres.so.%{sover}
-%ghost %{_libdir}/libopencv_superres.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_videostab.so.%{sover}
-%ghost %{_libdir}/libopencv_videostab.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_gpu.so.%{sover}
-%ghost %{_libdir}/libopencv_gpu.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_gpu.so.2.4
 %attr(755,root,root) %{_libdir}/libopencv_nonfree.so.%{sover}
-%ghost %{_libdir}/libopencv_nonfree.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_nonfree.so.2.4
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
@@ -343,11 +367,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
 %if %{with java}
-%exclude %{_libdir}/libopencv_java246.so
+%exclude %{_libdir}/libopencv_java248.so
 %endif
 %{_includedir}/opencv
 %{_includedir}/opencv2
-%{_datadir}/OpenCV/OpenCVConfig*.cmake
+%{_datadir}/OpenCV/OpenCV*.cmake
 %{_pkgconfigdir}/opencv.pc
 
 %files doc
@@ -358,8 +382,8 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with java}
 %files -n java-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_java246.so
-%{_javadir}/opencv-246.jar
+%attr(755,root,root) %{_libdir}/libopencv_java248.so
+%{_javadir}/opencv-248.jar
 %{_javadir}/opencv.jar
 %endif
 

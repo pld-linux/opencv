@@ -1,11 +1,10 @@
-diff -ur OpenCV-2.4.2.orig//cmake/OpenCVFindLibsVideo.cmake OpenCV-2.4.2/cmake/OpenCVFindLibsVideo.cmake
---- OpenCV-2.4.2.orig//cmake/OpenCVFindLibsVideo.cmake	2012-07-09 23:47:24.910117311 +0000
-+++ OpenCV-2.4.2/cmake/OpenCVFindLibsVideo.cmake	2012-07-09 23:48:25.689181021 +0000
-@@ -75,6 +75,7 @@
- ocv_clear_vars(HAVE_LIBV4L HAVE_CAMV4L HAVE_CAMV4L2)
+--- opencv-2.4.8/cmake/OpenCVFindLibsVideo.cmake.orig	2014-02-11 15:18:37.396156598 +0100
++++ opencv-2.4.8/cmake/OpenCVFindLibsVideo.cmake	2014-02-11 15:19:54.716153353 +0100
+@@ -127,6 +127,7 @@
  if(WITH_V4L)
-   CHECK_MODULE(libv4l1 HAVE_LIBV4L)
-+  CHECK_MODULE(libv4l2 HAVE_LIBV4L2)
+   if(WITH_LIBV4L)
+     CHECK_MODULE(libv4l1 HAVE_LIBV4L)
++    CHECK_MODULE(libv4l2 HAVE_LIBV4L2)
+   endif()
    CHECK_INCLUDE_FILE(linux/videodev.h HAVE_CAMV4L)
    CHECK_INCLUDE_FILE(linux/videodev2.h HAVE_CAMV4L2)
- endif(WITH_V4L)

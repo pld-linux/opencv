@@ -1,0 +1,10 @@
+--- opencv-2.4.8/modules/ts/CMakeLists.txt.orig	2013-12-27 18:09:18.000000000 +0100
++++ opencv-2.4.8/modules/ts/CMakeLists.txt	2014-02-12 20:02:41.148482142 +0100
+@@ -4,7 +4,6 @@
+   ocv_module_disable(ts)
+ endif()
+ 
+-set(OPENCV_MODULE_TYPE STATIC)
+ set(OPENCV_MODULE_IS_PART_OF_WORLD FALSE)
+ 
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wundef)
