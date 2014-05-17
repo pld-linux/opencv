@@ -2,6 +2,11 @@
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - CUDA, CUFFT, CUBLAS, NVCUVID support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
+# - GUI: VTK support
+# - Use GCD NO
+# - Use Concurrency NO
+# - Use C= (CSTRIPES): NO
+#   C/C++ Examples: NO
 #
 # Conditional build:
 # - general options:
@@ -18,6 +23,7 @@
 %bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
 %bcond_without	opengl		# OpenGL support
 %bcond_without	gomp		# OpenMP support
+%bcond_without	examples	# Install examples
 # - bindings
 %bcond_without	java		# Java binding
 # - highgui options:
@@ -40,8 +46,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.8
-Release:	4
+Version:	2.4.9
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -49,8 +55,8 @@ License:	GPL (enforced by used libraries), BSD (opencv itself)
 License:	BSD
 %endif
 Group:		Libraries
-Source0:	https://github.com/Itseez/opencv/archive/%{version}.tar.gz
-# Source0-md5:	9b8f1426bc01a1ae1e8b3bce11dc1e1c
+Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	cc0a8307403ff471f554197401ec0eb9
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -60,7 +66,7 @@ Patch5:		%{name}-ximea.patch
 Patch6:		%{name}-ocl-fft.patch
 Patch7:		java-ant-sourcelevel.patch
 Patch8:		%{name}-shared.patch
-URL:		http://opencv.willowgarage.com/
+URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
 BuildRequires:	OpenEXR-devel
@@ -202,6 +208,16 @@ Documentazione di OpenCV.
 %description doc -l pl.UTF-8
 Dokumentacja do OpenCV.
 
+%package examples
+Summary:	OpenCV code examples
+Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
+
+%description examples
+OpenCV code examples.
+
 %package -n java-opencv
 Summary:	OpenCV Java bindings
 Summary(pl.UTF-8):	Wiązania Javy do OpenCV
@@ -256,6 +272,10 @@ cd build
 	-DENABLE_SSE41=%{?with_sse41:ON}%{!?with_sse41:OFF} \
 	-DENABLE_SSE42=%{?with_sse42:ON}%{!?with_sse42:OFF} \
 	-DBUILD_NEW_PYTHON_SUPPORT=ON \
+%if %{with examples}
+	-DINSTALL_C_EXAMPLES=ON \
+	-DINSTALL_PYTHON_EXAMPLES=ON \
+%endif
 	%{?with_ffmpeg:-DWITH_FFMPEG=ON} \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
 	%{?with_opencl:-DWITH_OPENCL=ON} \
@@ -281,6 +301,10 @@ rm -rf $RPM_BUILD_ROOT
 
 # see -doc package
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/OpenCV/doc
+%if %{with examples}
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+mv $RPM_BUILD_ROOT%{_datadir}/OpenCV/samples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+%endif
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 cp -p build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
@@ -367,7 +391,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
 %if %{with java}
-%exclude %{_libdir}/libopencv_java248.so
+%exclude %{_libdir}/libopencv_java249.so
 %endif
 %{_includedir}/opencv
 %{_includedir}/opencv2
@@ -379,11 +403,17 @@ rm -rf $RPM_BUILD_ROOT
 # TODO: probably could rebuild them and package via make install
 %doc doc/*
 
+%if %{with examples}
+%files examples
+%defattr(644,root,root,755)
+%{_examplesdir}/%{name}-%{version}
+%endif
+
 %if %{with java}
 %files -n java-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_java248.so
-%{_javadir}/opencv-248.jar
+%attr(755,root,root) %{_libdir}/libopencv_java249.so
+%{_javadir}/opencv-249.jar
 %{_javadir}/opencv.jar
 %endif
 
