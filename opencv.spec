@@ -126,6 +126,7 @@ Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		sover	%(v=%{version}; k=${v#?.?.?}; echo ${v%$k})
+%define		jver	%(echo %{version} | tr -d .)
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -401,7 +402,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_*.so
 %if %{with java}
-%exclude %{_libdir}/libopencv_java249.so
+%exclude %{_libdir}/libopencv_java%{jver}.so
 %endif
 %{_includedir}/opencv
 %{_includedir}/opencv2
@@ -422,8 +423,8 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with java}
 %files -n java-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_java249.so
-%{_javadir}/opencv-249.jar
+%attr(755,root,root) %{_libdir}/libopencv_java%{jver}.so
+%{_javadir}/opencv-%{jver}.jar
 %{_javadir}/opencv.jar
 %endif
 
