@@ -127,9 +127,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		sover	%(v=%{version}; k=${v#?.?.?}; echo ${v%$k})
 
-# build broken, can't find g++
-%undefine	with_ccache
-
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
 functions mainly aimed at real time computer vision.
@@ -263,7 +260,20 @@ Wiązania Pythona do OpenCV.
 %build
 install -d build
 cd build
+
+# handle cmake & ccache
+# http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec
+if [[ "%{__cc}" = *ccache* ]]; then
+	cc="%{__cc}"
+	cxx="%{__cxx}"
+	ccache="
+	-DCMAKE_C_COMPILER="ccache" -DCMAKE_C_COMPILER_ARG1="${cc#ccache }" \
+	-DCMAKE_CXX_COMPILER="ccache" -DCMAKE_CXX_COMPILER_ARG1="${cxx#ccache }" \
+	"
+fi
+
 %cmake .. \
+	$ccache \
 	-DENABLE_AVX=%{?with_avx:ON}%{!?with_avx:OFF} \
 	-DENABLE_SSE=%{?with_sse:ON}%{!?with_sse:OFF} \
 	-DENABLE_SSE2=%{?with_sse2:ON}%{!?with_sse2:OFF} \
