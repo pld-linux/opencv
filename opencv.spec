@@ -47,7 +47,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.4.9
-Release:	1
+Release:	2
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -328,6 +328,8 @@ cp -p build/unix-install/opencv.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 # move to proper directories, create symlink
 install -d $RPM_BUILD_ROOT%{_javadir}
 %{__mv} $RPM_BUILD_ROOT%{_datadir}/OpenCV/java/libopencv_java*.so $RPM_BUILD_ROOT%{_libdir}
+sed -i -e 's#/share/OpenCV/java/libopencv_java%{jver}\.so#/%{_lib}/libopencv_java%{jver}.so#g' \
+	$RPM_BUILD_ROOT%{_datadir}/OpenCV/OpenCVModules-pld.cmake
 %{__mv} $RPM_BUILD_ROOT%{_datadir}/OpenCV/java/opencv-*.jar $RPM_BUILD_ROOT%{_javadir}
 rmdir $RPM_BUILD_ROOT%{_datadir}/OpenCV/java
 ln -sf $(basename $RPM_BUILD_ROOT%{_javadir}/opencv-*.jar) $RPM_BUILD_ROOT%{_javadir}/opencv.jar
