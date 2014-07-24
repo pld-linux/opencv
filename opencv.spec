@@ -358,6 +358,9 @@ rm -rf $RPM_BUILD_ROOT
 %post   core -p /sbin/ldconfig
 %postun core -p /sbin/ldconfig
 
+%post   viz -p /sbin/ldconfig
+%postun viz -p /sbin/ldconfig
+
 %post   -n java-opencv -p /sbin/ldconfig
 %postun -n java-opencv -p /sbin/ldconfig
 
