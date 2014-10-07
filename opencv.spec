@@ -110,6 +110,7 @@ BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
 %if %{with vtk}
 BuildRequires:	vtk-devel >= 5.8.0
+BuildRequires:	vtk-java >= 5.8.0
 BuildRequires:	vtk-tcl >= 5.8.0
 %endif
 %{?with_xine:BuildRequires:	xine-lib-devel}
