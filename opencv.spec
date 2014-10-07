@@ -44,7 +44,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	2.4.9
-Release:	3
+Release:	4
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -108,7 +108,10 @@ BuildRequires:	rpmbuild(macros) >= 1.606
 BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
-%{?with_vtk:BuildRequires:	vtk-devel >= 5.8.0}
+%if %{with vtk}
+BuildRequires:	vtk-devel >= 5.8.0
+BuildRequires:	vtk-tcl >= 5.8.0
+%endif
 %{?with_xine:BuildRequires:	xine-lib-devel}
 BuildRequires:	zlib-devel
 %if %{with qt}
