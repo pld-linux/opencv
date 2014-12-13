@@ -1,0 +1,13 @@
+--- opencv-2.4.10.1/modules/core/src/system.cpp.orig	2014-11-05 06:46:55.000000000 +0100
++++ opencv-2.4.10.1/modules/core/src/system.cpp	2014-12-13 18:19:43.147556993 +0100
+@@ -273,8 +273,9 @@
+          "movl $7,%%eax\n\t"
+          "movl $0,%%ecx\n\t"
+          "cpuid\n\t"
++         "movl %%ebx, %%esi\n\t"
+          "popl %%ebx\n\t"
+-         : "=a"(cpuid_data[0]), "=b"(cpuid_data[1]), "=c"(cpuid_data[2]), "=d"(cpuid_data[3])
++         : "=a"(cpuid_data[0]), "=S"(cpuid_data[1]), "=c"(cpuid_data[2]), "=d"(cpuid_data[3])
+          :
+          : "cc"
+         );

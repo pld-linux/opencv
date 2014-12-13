@@ -43,8 +43,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.9
-Release:	10
+Version:	2.4.10.1
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -53,9 +53,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	cc0a8307403ff471f554197401ec0eb9
+# Source0-md5:	f84af999f45edc829bfda60a13fedbaa
 Patch0:		%{name}-cflags.patch
-Patch1:		%{name}-link.patch
+Patch1:		%{name}-x86.patch
 Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
@@ -81,12 +81,12 @@ BuildRequires:	eigen3 >= 3
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
 %{?with_gomp:BuildRequires:	gcc-c++ >= 6:4.2}
 %if %{with gstreamer}
-BuildRequires:	gstreamer-devel >= 0.10
-BuildRequires:	gstreamer-plugins-base-devel >= 0.10
+BuildRequires:	gstreamer-devel >= 1.0
+BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %endif
 BuildRequires:	jasper-devel
 %{?with_java:BuildRequires:	jdk}
-BuildRequires:	libdc1394-devel
+BuildRequires:	libdc1394-devel >= 2
 %{?with_gomp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -100,12 +100,13 @@ BuildRequires:	libunicap-devel
 %endif
 BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
-BuildRequires:	python
-BuildRequires:	python-devel
+BuildRequires:	python >= 2.0
+BuildRequires:	python-devel >= 2.0
 BuildRequires:	python-numpy-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.606
 BuildRequires:	sed >= 4.0
+BuildRequires:	sphinx-pdg
 BuildRequires:	swig-python
 %{?with_tbb:BuildRequires:	tbb-devel}
 %if %{with vtk}
@@ -114,6 +115,7 @@ BuildRequires:	vtk-java >= 5.8.0
 BuildRequires:	vtk-tcl >= 5.8.0
 %endif
 %{?with_xine:BuildRequires:	xine-lib-devel}
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 %if %{with qt}
 BuildRequires:	QtCore-devel >= 4
@@ -127,8 +129,7 @@ BuildRequires:	gtk+2-devel >= 2.0
 Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		sover	%(v=%{version}; k=${v#?.?.?}; echo ${v%$k})
-%define		jver	%(echo %{version} | tr -d .)
+%define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -374,33 +375,33 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_haartraining
 %attr(755,root,root) %{_bindir}/opencv_performance
 %attr(755,root,root) %{_bindir}/opencv_traincascade
-%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_contrib.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_contrib.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_contrib.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_features2d.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_gpu.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_gpu.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_gpu.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_highgui.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_highgui.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_legacy.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_legacy.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_legacy.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_nonfree.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_nonfree.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_nonfree.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_objdetect.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_objdetect.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.2.4
 %if %{with opencl}
-%attr(755,root,root) %{_libdir}/libopencv_ocl.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_ocl.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_ocl.so.2.4
 %endif
-%attr(755,root,root) %{_libdir}/libopencv_stitching.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_stitching.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_superres.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_superres.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_ts.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_ts.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_ts.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_videostab.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_videostab.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.2.4
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
@@ -408,23 +409,23 @@ rm -rf $RPM_BUILD_ROOT
 
 %files core
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_core.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_core.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_flann.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_flann.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_imgproc.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_imgproc.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_ml.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_ml.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_photo.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_photo.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_video.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_video.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.2.4
 
 %if %{with vtk}
 %files viz
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_viz.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_viz.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.2.4
 %endif
 
