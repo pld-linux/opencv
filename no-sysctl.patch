@@ -9,24 +9,22 @@ Author: Adam Borowski <kilobyte@angband.pl>
 
 --- opencv-2.4.9.1+dfsg.orig/modules/core/src/parallel.cpp
 +++ opencv-2.4.9.1+dfsg/modules/core/src/parallel.cpp
-@@ -56,8 +56,8 @@
+@@ -56,7 +56,7 @@
      #include <sys/types.h>
      #if defined ANDROID
          #include <sys/sysconf.h>
--    #elif !defined __GNU__
--        #include <sys/sysctl.h>
-+     #elif defined __APPLE__
-+         #include <sys/sysctl.h>
+-    #else
++    #elif defined __APPLE__
+         #include <sys/sysctl.h>
      #endif
  #endif
- 
 --- opencv-2.4.9.1+dfsg.orig/modules/core/src/system.cpp
 +++ opencv-2.4.9.1+dfsg/modules/core/src/system.cpp
 @@ -163,8 +163,6 @@ std::wstring GetTempFileNameWinRT(std::w
  #include <sys/types.h>
  #if defined ANDROID
  #include <sys/sysconf.h>
--#elif !defined __GNU__
+-#else
 -#include <sys/sysctl.h>
  #endif
  #endif
