@@ -63,6 +63,7 @@ Patch5:		%{name}-ximea.patch
 Patch6:		%{name}-ocl-fft.patch
 Patch7:		java-ant-sourcelevel.patch
 Patch8:		%{name}-shared.patch
+Patch9:		no-sysctl.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -275,6 +276,7 @@ Wiązania Pythona do OpenCV.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %build
 install -d build
