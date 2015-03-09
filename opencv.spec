@@ -34,10 +34,10 @@
 # - other modules
 %bcond_without	vtk		# VTK library support (opencv_viz module)
 
-%ifarch pentium3 pentium4 %{x8664}
+%ifarch pentium3 pentium4 %{x8664} x32
 %define		with_sse	1
 %endif
-%ifarch pentium4 %{x8664}
+%ifarch pentium4 %{x8664} x32
 %define		with_sse2	1
 %endif
 Summary:	A library of programming functions mainly aimed at real time computer vision
@@ -64,6 +64,7 @@ Patch6:		%{name}-ocl-fft.patch
 Patch7:		java-ant-sourcelevel.patch
 Patch8:		%{name}-shared.patch
 Patch9:		no-sysctl.patch
+Patch10:	cmake-install-path.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -277,6 +278,7 @@ Wiązania Pythona do OpenCV.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 install -d build
