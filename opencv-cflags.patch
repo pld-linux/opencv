@@ -1,6 +1,5 @@
-diff -ur OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake OpenCV-2.4.2/cmake/OpenCVCompilerOptions.cmake
---- OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake	2012-07-09 23:40:12.980147858 +0000
-+++ OpenCV-2.4.2/cmake/OpenCVCompilerOptions.cmake	2012-07-09 23:46:59.773180868 +0000
+--- opencv-2.4.11/cmake/OpenCVCompilerOptions.cmake~	2015-05-19 11:39:16.000000000 +0300
++++ opencv-2.4.11/cmake/OpenCVCompilerOptions.cmake	2015-05-19 11:47:57.851517663 +0300
 @@ -47,6 +47,8 @@
    endif()
  endmacro()
@@ -10,7 +9,7 @@ diff -ur OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake OpenCV-2.4.2/cmake
  if(MINGW)
    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838
    # here we are trying to workaround the problem
-@@ -105,10 +107,6 @@
+@@ -110,10 +110,6 @@
      add_extra_compiler_option(-Werror)
    endif()
  
@@ -18,6 +17,6 @@ diff -ur OpenCV-2.4.2.orig//cmake/OpenCVCompilerOptions.cmake OpenCV-2.4.2/cmake
 -    add_extra_compiler_option(-march=i686)
 -  endif()
 -
-   # Other optimizations
-   if(ENABLE_OMIT_FRAME_POINTER)
-     add_extra_compiler_option(-fomit-frame-pointer)
+   if(APPLE)
+     add_extra_compiler_option(-Wno-semicolon-before-method-body)
+   endif()

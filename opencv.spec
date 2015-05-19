@@ -43,8 +43,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.10.1
-Release:	2
+Version:	2.4.11
+Release:	0.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -53,7 +53,7 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	f84af999f45edc829bfda60a13fedbaa
+# Source0-md5:	fa06384719cb0be48183b4de972f0b2a
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-x86.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -269,7 +269,7 @@ Wiązania Pythona do OpenCV.
 %undos modules/gpu/CMakeLists.txt
 
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1 needs checking
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
