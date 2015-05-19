@@ -55,7 +55,6 @@ Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	fa06384719cb0be48183b4de972f0b2a
 Patch0:		%{name}-cflags.patch
-Patch1:		%{name}-x86.patch
 Patch2:		%{name}-unicap-c++.patch
 Patch3:		%{name}-c.patch
 Patch4:		%{name}-gcc.patch
@@ -269,7 +268,6 @@ Wiązania Pythona do OpenCV.
 %undos modules/gpu/CMakeLists.txt
 
 %patch0 -p1
-#%patch1 -p1 needs checking
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
