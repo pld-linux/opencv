@@ -17,7 +17,7 @@
 %bcond_with	opencl_amdblas	# AMD OpenCL BLAS routines
 %bcond_with	opencl_amdfft	# AMD OpenCL FFT routines
 %bcond_without	opengl		# OpenGL support
-%bcond_without	gomp		# OpenMP support (available when not using tbb)
+%bcond_without	openmp		# OpenMP support (available when not using tbb)
 %bcond_without	examples	# Install examples
 # - bindings
 %bcond_without	java		# Java binding
@@ -81,7 +81,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
-%{?with_gomp:BuildRequires:	gcc-c++ >= 6:4.2}
+%{?with_openmp:BuildRequires:	gcc-c++ >= 6:4.2}
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 1.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0
@@ -89,7 +89,7 @@ BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 BuildRequires:	jasper-devel
 %{?with_java:BuildRequires:	jdk}
 BuildRequires:	libdc1394-devel >= 2
-%{?with_gomp:BuildRequires:	libgomp-devel}
+%{?with_openmp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw1394-devel
@@ -315,7 +315,7 @@ fi
 	%{!?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=OFF} \
 	%{!?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=OFF} \
 	%{?with_opengl:-DWITH_OPENGL=ON} \
-	%{?with_gomp:-DWITH_OPENMP=ON} \
+	%{?with_openmp:-DWITH_OPENMP=ON} \
 	%{?with_openni:-DWITH_OPENNI=ON} \
 	%{?with_pvapi:-DPVAPI_LIBRARY=%{_libdir}/libPvAPI.so}%{!?with_pvapi:-DWITH_PVAPI=OFF} \
 	%{?with_qt:-DWITH_QT=ON %{?with_opengl:-DWITH_QT_OPENGL=ON} -DQT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4} \
