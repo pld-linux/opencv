@@ -43,8 +43,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.11
-Release:	6
+Version:	2.4.12.3
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -53,7 +53,7 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	fa06384719cb0be48183b4de972f0b2a
+# Source0-md5:	2496a4a4caf8fecfbfc294fbe6a814b0
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-cmake.patch
 Patch2:		%{name}-unicap-c++.patch
@@ -378,6 +378,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/opencv_annotation
 %attr(755,root,root) %{_bindir}/opencv_createsamples
 %attr(755,root,root) %{_bindir}/opencv_haartraining
 %attr(755,root,root) %{_bindir}/opencv_performance
