@@ -82,6 +82,7 @@ BuildRequires:	doxygen
 BuildRequires:	eigen3 >= 3
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel >= 0.7}
 %{?with_openmp:BuildRequires:	gcc-c++ >= 6:4.2}
+BuildRequires:	gl2ps-devel
 %if %{with gstreamer}
 BuildRequires:	gstreamer-devel >= 1.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0
