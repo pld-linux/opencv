@@ -126,6 +126,7 @@ Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
+%define		sover	%(echo %{version} | cut -d. -f1-2)
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -367,19 +368,19 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_createsamples
 %attr(755,root,root) %{_bindir}/opencv_traincascade
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_highgui.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_objdetect.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_stitching.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_superres.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_videostab.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.%{sover}
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
@@ -387,29 +388,29 @@ rm -rf $RPM_BUILD_ROOT
 %files core
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_core.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_flann.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_imgproc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_ml.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_photo.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_video.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_imgcodecs.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_imgcodecs.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_imgcodecs.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_shape.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_shape.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_shape.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_videoio.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_videoio.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_videoio.so.%{sover}
 
 %if %{with vtk}
 %files viz
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_viz.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.3.1
+%attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.%{sover}
 %endif
 
 %files devel
