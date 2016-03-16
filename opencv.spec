@@ -43,7 +43,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	2.4.12.3
+Version:	3.1.0
 Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
@@ -53,17 +53,10 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	2496a4a4caf8fecfbfc294fbe6a814b0
+# Source0-md5:	70e1dd07f0aa06606f1bc0e3fa15abd3
 Patch0:		%{name}-cflags.patch
-Patch1:		%{name}-cmake.patch
-Patch2:		%{name}-unicap-c++.patch
-Patch3:		%{name}-c.patch
-Patch4:		%{name}-gcc.patch
 Patch5:		%{name}-ximea.patch
-Patch6:		%{name}-ocl-fft.patch
 Patch7:		java-ant-sourcelevel.patch
-Patch8:		%{name}-shared.patch
-Patch9:		no-sysctl.patch
 Patch10:	cmake-install-path.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
@@ -267,18 +260,10 @@ Wiązania Pythona do OpenCV.
 %setup -q
 
 %undos CMakeLists.txt
-%undos modules/gpu/CMakeLists.txt
 
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch9 -p1
 %patch10 -p1
 
 %build
@@ -325,7 +310,8 @@ fi
 	%{!?with_v4l:-DWITH_V4L=OFF} \
 	%{?with_vtk:-DWITH_VTK=ON} \
 	%{?with_ximea:-DWITH_XIMEA=ON} \
-	%{?with_xine:-DWITH_XINE=ON}
+	%{?with_xine:-DWITH_XINE=ON} \
+	-DWITH_IPP=OFF
 
 %{__make}
 
@@ -334,8 +320,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# see -doc package
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/OpenCV/doc
 %if %{with examples}
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 mv $RPM_BUILD_ROOT%{_datadir}/OpenCV/samples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
@@ -381,37 +365,21 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/opencv_annotation
 %attr(755,root,root) %{_bindir}/opencv_createsamples
-%attr(755,root,root) %{_bindir}/opencv_haartraining
-%attr(755,root,root) %{_bindir}/opencv_performance
 %attr(755,root,root) %{_bindir}/opencv_traincascade
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_contrib.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_contrib.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_gpu.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_gpu.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_highgui.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_legacy.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_legacy.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_nonfree.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_nonfree.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_objdetect.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.2.4
-%if %{with opencl}
-%attr(755,root,root) %{_libdir}/libopencv_ocl.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ocl.so.2.4
-%endif
+%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_stitching.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_superres.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.2.4
-%attr(755,root,root) %{_libdir}/libopencv_ts.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ts.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_videostab.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.3.1
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
@@ -419,23 +387,29 @@ rm -rf $RPM_BUILD_ROOT
 %files core
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_core.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_flann.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_imgproc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_ml.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_photo.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.3.1
 %attr(755,root,root) %{_libdir}/libopencv_video.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.3.1
+%attr(755,root,root) %{_libdir}/libopencv_imgcodecs.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_imgcodecs.so.3.1
+%attr(755,root,root) %{_libdir}/libopencv_shape.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_shape.so.3.1
+%attr(755,root,root) %{_libdir}/libopencv_videoio.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_videoio.so.3.1
 
 %if %{with vtk}
 %files viz
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopencv_viz.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.3.1
 %endif
 
 %files devel
@@ -449,20 +423,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_video.so
 # GUI/extensions (base package)
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so
-%attr(755,root,root) %{_libdir}/libopencv_contrib.so
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so
-%attr(755,root,root) %{_libdir}/libopencv_gpu.so
 %attr(755,root,root) %{_libdir}/libopencv_highgui.so
-%attr(755,root,root) %{_libdir}/libopencv_legacy.so
-%attr(755,root,root) %{_libdir}/libopencv_nonfree.so
 %attr(755,root,root) %{_libdir}/libopencv_objdetect.so
-%if %{with opencl}
-%attr(755,root,root) %{_libdir}/libopencv_ocl.so
-%endif
 %attr(755,root,root) %{_libdir}/libopencv_stitching.so
 %attr(755,root,root) %{_libdir}/libopencv_superres.so
-%attr(755,root,root) %{_libdir}/libopencv_ts.so
 %attr(755,root,root) %{_libdir}/libopencv_videostab.so
+%attr(755,root,root) %{_libdir}/libopencv_imgcodecs.so
+%attr(755,root,root) %{_libdir}/libopencv_shape.so
+%attr(755,root,root) %{_libdir}/libopencv_videoio.so
+%{_libdir}/libopencv_ts.a
 # viz
 %if %{with vtk}
 %attr(755,root,root) %{_libdir}/libopencv_viz.so
@@ -494,4 +464,4 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-opencv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/cv2.so
-%{py_sitedir}/cv.py[co]
+#%{py_sitedir}/cv.py[co]
