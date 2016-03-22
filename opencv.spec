@@ -101,6 +101,9 @@ BuildRequires:	pkgconfig
 BuildRequires:	python >= 2.0
 BuildRequires:	python-devel >= 2.0
 BuildRequires:	python-numpy-devel
+BuildRequires:	python3 >= 1:3.2
+BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-numpy-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.606
 BuildRequires:	sed >= 4.0
@@ -247,17 +250,30 @@ OpenCV Java bindings.
 Wiązania Javy do OpenCV.
 
 %package -n python-opencv
-Summary:	OpenCV Python bindings
-Summary(pl.UTF-8):	Wiązania Pythona do OpenCV
+Summary:	OpenCV Python 2 bindings
+Summary(pl.UTF-8):	Wiązania Pythona 2 do OpenCV
 Group:		Libraries/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python-libs
 
 %description -n python-opencv
-OpenCV Python bindings.
+OpenCV Python 2 bindings.
 
 %description -n python-opencv -l pl.UTF-8
-Wiązania Pythona do OpenCV.
+Wiązania Pythona 2 do OpenCV.
+
+%package -n python3-opencv
+Summary:	OpenCV Python 3 bindings
+Summary(pl.UTF-8):	Wiązania Pythona 3 do OpenCV
+Group:		Libraries/Python
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	python3-libs
+
+%description -n python3-opencv
+OpenCV Python 3 bindings.
+
+%description -n python3-opencv -l pl.UTF-8
+Wiązania Pythona 3 do OpenCV.
 
 %prep
 %setup -q -a1
@@ -549,4 +565,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-opencv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/cv2.so
-#%{py_sitedir}/cv.py[co]
+
+%files -n python3-opencv
+%defattr(644,root,root,755)
+%attr(755,root,root) %{py3_sitedir}/cv2.cpython-*.so
