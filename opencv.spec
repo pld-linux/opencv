@@ -1,4 +1,13 @@
 # TODO:
+# - contrib subpackage(s)
+# - contrib BRs:
+#   opencv_contrib-3.1.0/modules/cnn_3dobj/CMakeLists.txt:find_package(Caffe)
+#   opencv_contrib-3.1.0/modules/cnn_3dobj/CMakeLists.txt:find_package(Protobuf)
+#   opencv_contrib-3.1.0/modules/cnn_3dobj/CMakeLists.txt:find_package(Glog)
+#   opencv_contrib-3.1.0/modules/hdf/CMakeLists.txt:find_package(HDF5)
+#   opencv_contrib-3.1.0/modules/sfm/CMakeLists.txt:find_package(Ceres QUIET)
+#   opencv_contrib-3.1.0/modules/text/CMakeLists.txt:find_package(Tesseract)
+#
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - CUDA, CUFFT, CUBLAS, NVCUVID support (on bcond)
 # - ipp (libippi): http://software.intel.com/en-us/articles/intel-ipp/ (proprietary)
