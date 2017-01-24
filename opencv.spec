@@ -53,7 +53,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	3.1.0
-Release:	3
+Release:	3.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -66,9 +66,10 @@ Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
 # Source1-md5:	a822839ad3ab79ff837c16785ea9dd10
 Patch0:		%{name}-cflags.patch
-Patch5:		%{name}-ximea.patch
-Patch7:		java-ant-sourcelevel.patch
-Patch10:	cmake-install-path.patch
+Patch1:		%{name}-ximea.patch
+Patch2:		java-ant-sourcelevel.patch
+Patch3:		cmake-install-path.patch
+Patch4:		vtk7.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -290,9 +291,10 @@ Wiązania Pythona 3 do OpenCV.
 %undos CMakeLists.txt
 
 %patch0 -p1
-%patch5 -p1
-%patch7 -p1
-%patch10 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 install -d build
@@ -311,6 +313,7 @@ fi
 
 %cmake .. \
 	$ccache \
+	-DENABLE_PRECOMPILED_HEADERS=OFF \
 	-DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-%{version}/modules \
 	-DENABLE_AVX=%{?with_avx:ON}%{!?with_avx:OFF} \
 	-DENABLE_SSE=%{?with_sse:ON}%{!?with_sse:OFF} \
