@@ -53,7 +53,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	3.1.0
-Release:	7.1
+Release:	7.2
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -70,6 +70,7 @@ Patch1:		%{name}-ximea.patch
 Patch2:		java-ant-sourcelevel.patch
 Patch3:		cmake-install-path.patch
 Patch4:		vtk7.patch
+Patch5:		no-redefinition.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -297,6 +298,7 @@ Wiązania Pythona 3 do OpenCV.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 install -d build
