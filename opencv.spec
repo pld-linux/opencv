@@ -7,6 +7,13 @@
 #   opencv_contrib-3.1.0/modules/hdf/CMakeLists.txt:find_package(HDF5)
 #   opencv_contrib-3.1.0/modules/sfm/CMakeLists.txt:find_package(Ceres QUIET)
 #   opencv_contrib-3.1.0/modules/text/CMakeLists.txt:find_package(Tesseract)
+# unpackaged (3.4.0)
+#/usr/share/OpenCV/3rdparty/usr/lib64/libcorrespondence.a
+#/usr/share/OpenCV/3rdparty/usr/lib64/libmultiview.a
+#/usr/share/OpenCV/3rdparty/usr/lib64/libnumeric.a
+#/usr/share/OpenCV/valgrind.supp
+#/usr/share/OpenCV/valgrind_3rdparty.supp
+
 #
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - CUDA, CUFFT, CUBLAS, NVCUVID support (on bcond)
@@ -52,8 +59,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	3.1.0
-Release:	9
+Version:	3.4.0
+Release:	0.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -62,9 +69,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	70e1dd07f0aa06606f1bc0e3fa15abd3
+# Source0-md5:	170732dc760e5f7ddeccbe53ba5d16a6
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	a822839ad3ab79ff837c16785ea9dd10
+# Source1-md5:	315c3725234ec02fb4f6e55383376d00
 Patch0:		%{name}-cflags.patch
 Patch1:		%{name}-ximea.patch
 Patch2:		java-ant-sourcelevel.patch
@@ -296,9 +303,9 @@ Wiązania Pythona 3 do OpenCV.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
+#%patch3 -p1
+#%patch4 -p1
+#%patch5 -p2 -d opencv_contrib-%{version}
 
 %build
 install -d build
@@ -318,6 +325,7 @@ fi
 %cmake .. \
 	$ccache \
 	-DENABLE_PRECOMPILED_HEADERS=OFF \
+	-DOPENCV_LIB_INSTALL_PATH=%{_libdir} \
 	-DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-%{version}/modules \
 	-DENABLE_AVX=%{?with_avx:ON}%{!?with_avx:OFF} \
 	-DENABLE_SSE=%{?with_sse:ON}%{!?with_sse:OFF} \
@@ -401,7 +409,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/opencv_annotation
 %attr(755,root,root) %{_bindir}/opencv_createsamples
+%attr(755,root,root) %{_bindir}/opencv_interactive-calibration
 %attr(755,root,root) %{_bindir}/opencv_traincascade
+%attr(755,root,root) %{_bindir}/opencv_version
+%attr(755,root,root) %{_bindir}/opencv_visualisation
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
@@ -434,14 +445,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_dpm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_face.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_face.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_freetype.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_freetype.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_fuzzy.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_fuzzy.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_hdf.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_hdf.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_img_hash.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_img_hash.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_line_descriptor.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_optflow.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_optflow.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_phase_unwrapping.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_phase_unwrapping.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_plot.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_plot.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_reg.so.%{sover}
@@ -470,6 +487,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_xobjdetect.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_xphoto.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_xphoto.so.*.*.*
+
 %dir %{_datadir}/OpenCV
 %{_datadir}/OpenCV/haarcascades
 %{_datadir}/OpenCV/lbpcascades
@@ -531,10 +549,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_dnn.so
 %attr(755,root,root) %{_libdir}/libopencv_dpm.so
 %attr(755,root,root) %{_libdir}/libopencv_face.so
+%attr(755,root,root) %{_libdir}/libopencv_freetype.so
 %attr(755,root,root) %{_libdir}/libopencv_fuzzy.so
 %attr(755,root,root) %{_libdir}/libopencv_hdf.so
+%attr(755,root,root) %{_libdir}/libopencv_img_hash.so
 %attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so
 %attr(755,root,root) %{_libdir}/libopencv_optflow.so
+%attr(755,root,root) %{_libdir}/libopencv_phase_unwrapping.so
 %attr(755,root,root) %{_libdir}/libopencv_plot.so
 %attr(755,root,root) %{_libdir}/libopencv_reg.so
 %attr(755,root,root) %{_libdir}/libopencv_rgbd.so
@@ -549,7 +570,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_ximgproc.so
 %attr(755,root,root) %{_libdir}/libopencv_xobjdetect.so
 %attr(755,root,root) %{_libdir}/libopencv_xphoto.so
-%{_libdir}/libopencv_ts.a
+#%{_libdir}/libopencv_ts.a
 # viz
 %if %{with vtk}
 %attr(755,root,root) %{_libdir}/libopencv_viz.so
