@@ -433,6 +433,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_datasets.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_dnn.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_dnn.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn_objdetect.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_dnn_objdetect.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_dpm.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_dpm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_face.so.%{sover}
@@ -443,6 +445,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_fuzzy.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_hdf.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_hdf.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_hfs.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_hfs.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_img_hash.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_img_hash.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_line_descriptor.so.%{sover}
@@ -539,11 +543,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_ccalib.so
 %attr(755,root,root) %{_libdir}/libopencv_datasets.so
 %attr(755,root,root) %{_libdir}/libopencv_dnn.so
+%attr(755,root,root) %{_libdir}/libopencv_dnn_objdetect.so
 %attr(755,root,root) %{_libdir}/libopencv_dpm.so
 %attr(755,root,root) %{_libdir}/libopencv_face.so
 %attr(755,root,root) %{_libdir}/libopencv_freetype.so
 %attr(755,root,root) %{_libdir}/libopencv_fuzzy.so
 %attr(755,root,root) %{_libdir}/libopencv_hdf.so
+%attr(755,root,root) %{_libdir}/libopencv_hfs.so
 %attr(755,root,root) %{_libdir}/libopencv_img_hash.so
 %attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so
 %attr(755,root,root) %{_libdir}/libopencv_optflow.so
