@@ -72,6 +72,33 @@ Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.
 # Source0-md5:	a0b7a47899e67b3490ea31edc4f6e8e6
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
 # Source1-md5:	dd0c63f4185ab8a4829d8154ae382266
+# See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
+Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
+# Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
+Source11:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm_bi.i
+# Source11-md5:	232c966b13651bd0e46a1497b0852191
+Source12:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm_hd.i
+# Source12-md5:	324426a24fa56ad9c5b8e3e0b3e5303e
+Source13:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_binboost_064.i
+# Source13-md5:	202e1b3e9fec871b04da31f7f016679f
+Source14:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_binboost_128.i
+# Source14-md5:	98ea99d399965c03d555cef3ea502a0b
+Source15:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_binboost_256.i
+# Source15-md5:	e6dcfa9f647779eb1ce446a8d759b6ea
+Source16:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_lbgm.i
+# Source16-md5:	0ae0675534aa318d9668f2a179c2a052
+# See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_vgg.cmake
+Source20:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_48.i
+# Source20-md5:	e8d0dcd54d1bcfdc29203d011a797179
+Source21:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_64.i
+# Source21-md5:	7126a5d9a8884ebca5aea5d63d677225
+Source22:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_80.i
+# Source22-md5:	7cd47228edec52b6d82f46511af325c5
+Source23:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_120.i
+# Source23-md5:	151805e03568c9f490a5e3a872777b75
+Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
+# Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
+Patch0:		ix86-pause.patch
 Patch1:		%{name}-ximea.patch
 Patch3:		cmake-install-path.patch
 URL:		http://www.opencv.org/
@@ -84,6 +111,7 @@ BuildRequires:	OpenEXR-devel
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel >= 4}
 %{?with_java:BuildRequires:	ant}
+BuildRequires:	boost-devel
 %{?with_opencl_amdblas:BuildRequires:	clAmdBlas-devel}
 %{?with_opencl_amdfft:BuildRequires:	clAmdFft-devel}
 BuildRequires:	cmake >= 2.8
@@ -296,12 +324,17 @@ Wiązania Pythona 3 do OpenCV.
 
 %undos CMakeLists.txt
 
+%patch0 -p1
 %patch1 -p1
 %patch3 -p1
 
 %build
-install -d build
+install -d build/{share/OpenCV/testdata/cv/face,downloads/xfeatures2d}
 cd build
+
+install %{SOURCE30} share/OpenCV/testdata/cv/face/
+install %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE16} downloads/xfeatures2d/
+install %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23} downloads/xfeatures2d/
 
 # handle cmake & ccache
 # http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec

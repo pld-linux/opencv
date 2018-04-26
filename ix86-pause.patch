@@ -1,0 +1,14 @@
+--- opencv-3.4.1/modules/core/src/parallel_impl.cpp~	2018-02-23 09:38:33.000000000 +0100
++++ opencv-3.4.1/modules/core/src/parallel_impl.cpp	2018-04-26 22:46:13.441805476 +0200
+@@ -49,8 +49,10 @@
+ DECLARE_CV_PAUSE
+ #endif
+ #ifndef CV_PAUSE
+-#if defined __GNUC__ && (defined __i386__ || defined __x86_64__)
++#if defined __GNUC__ && defined __x86_64__
+ #   define CV_PAUSE(v) do { for (int __delay = (v); __delay > 0; --__delay) { _mm_pause(); } } while (0)
++# elif defined __GNUC__ && defined __i386__
++#   define CV_PAUSE(v) do { for (int __delay = (v); __delay > 0; --__delay) { asm volatile("pause" ::: "memory"); } } while (0)
+ # elif defined __GNUC__ && defined __aarch64__
+ #   define CV_PAUSE(v) do { for (int __delay = (v); __delay > 0; --__delay) { asm volatile("yield" ::: "memory"); } } while (0)
+ # elif defined __GNUC__ && defined __arm__
