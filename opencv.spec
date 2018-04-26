@@ -59,7 +59,7 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	3.4.0
+Version:	3.4.1
 Release:	0.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
@@ -69,15 +69,11 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	170732dc760e5f7ddeccbe53ba5d16a6
+# Source0-md5:	a0b7a47899e67b3490ea31edc4f6e8e6
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	315c3725234ec02fb4f6e55383376d00
-Patch0:		%{name}-cflags.patch
+# Source1-md5:	dd0c63f4185ab8a4829d8154ae382266
 Patch1:		%{name}-ximea.patch
-Patch2:		java-ant-sourcelevel.patch
 Patch3:		cmake-install-path.patch
-Patch4:		vtk7.patch
-Patch5:		no-redefinition.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -300,12 +296,8 @@ Wiązania Pythona 3 do OpenCV.
 
 %undos CMakeLists.txt
 
-%patch0 -p1
 %patch1 -p1
-%patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
-#%patch5 -p2 -d opencv_contrib-%{version}
+%patch3 -p1
 
 %build
 install -d build

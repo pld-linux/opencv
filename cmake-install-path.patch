@@ -1,16 +1,18 @@
 --- opencv-2.4.10.1/CMakeLists.txt~	2015-03-09 14:42:05.000000000 +0100
 +++ opencv-2.4.10.1/CMakeLists.txt	2015-03-09 14:50:49.355937198 +0100
-@@ -324,12 +324,7 @@
-   endif()
-   set(OPENCV_INCLUDE_INSTALL_PATH "include")
+@@ -445,14 +445,7 @@
+     ocv_update(OPENCV_JAR_INSTALL_PATH share/OpenCV/java)
+     ocv_update(OPENCV_OTHER_INSTALL_PATH   share/OpenCV)
  
--  math(EXPR SIZEOF_VOID_P_BITS "8 * ${CMAKE_SIZEOF_VOID_P}")
--  if(LIB_SUFFIX AND NOT SIZEOF_VOID_P_BITS EQUAL LIB_SUFFIX)
--    set(OPENCV_CONFIG_INSTALL_PATH lib${LIB_SUFFIX}/cmake/opencv)
--  else()
--    set(OPENCV_CONFIG_INSTALL_PATH share/OpenCV)
--  endif()
+-    if(NOT DEFINED OPENCV_CONFIG_INSTALL_PATH)
+-      math(EXPR SIZEOF_VOID_P_BITS "8 * ${CMAKE_SIZEOF_VOID_P}")
+-      if(LIB_SUFFIX AND NOT SIZEOF_VOID_P_BITS EQUAL LIB_SUFFIX)
+-        ocv_update(OPENCV_CONFIG_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}${LIB_SUFFIX}/cmake/opencv)
+-      else()
+-        ocv_update(OPENCV_CONFIG_INSTALL_PATH share/OpenCV)
+-      endif()
+-    endif()
 +  set(OPENCV_CONFIG_INSTALL_PATH share/OpenCV)
+   endif()
+   ocv_update(OPENCV_INCLUDE_INSTALL_PATH "include")
  endif()
- 
- set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${OPENCV_LIB_INSTALL_PATH}")
