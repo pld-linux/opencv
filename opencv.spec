@@ -96,6 +96,7 @@ Source22:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12
 # Source22-md5:	7cd47228edec52b6d82f46511af325c5
 Source23:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_120.i
 # Source23-md5:	151805e03568c9f490a5e3a872777b75
+# See opencv_contrib-3.4.1/modules/face/CMakeLists.txt
 Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
 # Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
 Patch0:		ix86-pause.patch
