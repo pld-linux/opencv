@@ -101,6 +101,7 @@ Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229
 # Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
 Patch0:		ix86-pause.patch
 Patch1:		%{name}-ximea.patch
+Patch2:		cplusplus.patch
 Patch3:		cmake-install-path.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
@@ -327,6 +328,7 @@ Wiązania Pythona 3 do OpenCV.
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 
 %build
