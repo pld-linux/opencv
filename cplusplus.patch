@@ -26,3 +26,17 @@
  #endif
  #endif
  
+--- opencv-3.4.1/modules/highgui/include/opencv2/highgui/highgui_c.h~	2018-02-23 09:38:33.000000000 +0100
++++ opencv-3.4.1/modules/highgui/include/opencv2/highgui/highgui_c.h	2018-04-30 00:00:01.659113349 +0200
+@@ -136,7 +136,11 @@
+ CVAPI(double) cvGetWindowProperty(const char* name, int prop_id);
+ 
+ /* Get window image rectangle coordinates, width and height */
++#ifdef __cplusplus
+ CVAPI(cv::Rect)cvGetWindowImageRect(const char* name);
++#else
++CVAPI(CvRect)cvGetWindowImageRect(const char* name);
++#endif
+ 
+ /* display image within window (highgui windows remember their content) */
+ CVAPI(void) cvShowImage( const char* name, const CvArr* image );
