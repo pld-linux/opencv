@@ -60,7 +60,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	3.4.8
-Release:	0.1
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -437,6 +437,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_traincascade
 %attr(755,root,root) %{_bindir}/opencv_version
 %attr(755,root,root) %{_bindir}/opencv_visualisation
+%attr(755,root,root) %{_bindir}/setup_vars_opencv3.sh
 %attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
@@ -483,6 +484,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_img_hash.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_line_descriptor.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_ovis.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_ovis.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_optflow.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_optflow.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_phase_unwrapping.so.%{sover}
@@ -585,6 +588,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_img_hash.so
 %attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so
 %attr(755,root,root) %{_libdir}/libopencv_optflow.so
+%attr(755,root,root) %{_libdir}/libopencv_ovis.so
 %attr(755,root,root) %{_libdir}/libopencv_phase_unwrapping.so
 %attr(755,root,root) %{_libdir}/libopencv_plot.so
 %attr(755,root,root) %{_libdir}/libopencv_reg.so
