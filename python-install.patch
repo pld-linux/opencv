@@ -1,0 +1,11 @@
+--- opencv-3.4.8/cmake/OpenCVDetectPython.cmake.orig	2019-10-09 13:42:29.000000000 +0200
++++ opencv-3.4.8/cmake/OpenCVDetectPython.cmake	2019-10-31 09:08:46.890255326 +0100
+@@ -186,7 +186,7 @@
+         else() #debian based assumed, install to the dist-packages.
+           set(_packages_path "python${_version_major_minor}/dist-packages")
+         endif()
+-        set(_packages_path "lib/${_packages_path}")
++	set(_packages_path "lib${LIB_SUFFIX}/${_packages_path}")
+       elseif(CMAKE_HOST_WIN32)
+         get_filename_component(_path "${_executable}" PATH)
+         file(TO_CMAKE_PATH "${_path}" _path)

@@ -59,8 +59,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	3.4.1
-Release:	11
+Version:	3.4.8
+Release:	0.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -69,9 +69,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	a0b7a47899e67b3490ea31edc4f6e8e6
+# Source0-md5:	5aa8240c28c00a7dacdf51698e0ced77
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	dd0c63f4185ab8a4829d8154ae382266
+# Source1-md5:	9c9f239364669b3315f9cae12dafb7b7
 # See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
 Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
 # Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
@@ -99,11 +99,8 @@ Source23:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12
 # See opencv_contrib-3.4.1/modules/face/CMakeLists.txt
 Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
 # Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
-Patch0:		ix86-pause.patch
-Patch1:		%{name}-ximea.patch
-Patch2:		cplusplus.patch
-Patch3:		cmake-install-path.patch
-Patch4:		build.patch
+Patch0:		%{name}-ximea.patch
+Patch1:		python-install.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -329,9 +326,6 @@ Wiązania Pythona 3 do OpenCV.
 
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 install -d build/{share/OpenCV/testdata/cv/face,downloads/xfeatures2d}
@@ -637,8 +631,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/cv2.so
+%dir %{py_sitedir}/cv2
+%dir %{py_sitedir}/cv2/python-*
+%attr(755,root,root) %{py_sitedir}/cv2/python-*/cv2.so
+%{py_sitedir}/cv2/*.py[co]
 
 %files -n python3-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py3_sitedir}/cv2.cpython-*.so
+%dir %{py3_sitedir}/cv2
+%dir %{py3_sitedir}/cv2/python-*
+%attr(755,root,root) %{py3_sitedir}/cv2/python-*/cv2.cpython-*.so
+%{py3_sitedir}/cv2/*.py
