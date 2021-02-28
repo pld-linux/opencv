@@ -254,9 +254,7 @@ Summary(it.UTF-8):	Documentazione di OpenCV
 Summary(pl.UTF-8):	Podręcznik dla OpenCV
 Group:		Documentation
 # noarch subpackages only when building with rpm5
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description doc
 Documentation for OpenCV.
@@ -273,9 +271,7 @@ Dokumentacja do OpenCV.
 %package examples
 Summary:	OpenCV code examples
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description examples
 OpenCV code examples.
