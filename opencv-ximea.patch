@@ -1,15 +1,10 @@
---- OpenCV-2.4.3/cmake/OpenCVFindXimea.cmake.orig	2012-10-18 00:55:38.000000000 +0200
-+++ OpenCV-2.4.3/cmake/OpenCVFindXimea.cmake	2013-02-14 19:10:24.278758230 +0100
-@@ -27,10 +27,10 @@
-     set(XIMEA_FOUND 0)
+--- opencv-4.5.1/modules/videoio/cmake/detect_ximea.cmake~	2020-12-21 21:01:38.000000000 +0100
++++ opencv-4.5.1/modules/videoio/cmake/detect_ximea.cmake	2021-03-06 09:50:48.915720952 +0100
+@@ -13,6 +13,7 @@
+     set(lib_suffix "32")
    endif()
- else()
--  if(EXISTS /opt/XIMEA)
-+  if(EXISTS /usr/include/ximea)
-     set(XIMEA_FOUND 1)
-     # set folders
--    set(XIMEA_PATH /opt/XIMEA/include)
-+    set(XIMEA_PATH /usr/include/ximea)
-   else()
-     set(XIMEA_FOUND 0)
-   endif()
+   find_path(XIMEA_INCLUDE "xiApi.h"
++    "/usr/include/ximea"
+     PATHS "${XIMEA_ROOT}" ENV XIMEA_ROOT "/opt/XIMEA"
+     HINTS "${regpath}"
+     PATH_SUFFIXES "include" "API")
