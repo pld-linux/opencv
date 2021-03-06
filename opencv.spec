@@ -144,6 +144,7 @@ BuildRequires:	libucil-devel
 BuildRequires:	libunicap-devel
 %endif
 BuildRequires:	libv4l-devel
+BuildRequires:	ogre-devel
 BuildRequires:	pkgconfig
 BuildRequires:	protobuf-devel
 BuildRequires:	python >= 2.0
