@@ -339,7 +339,7 @@ cache_file() {
 	md5="$(md5sum "$f" | awk '{print $1}')"
 	file="$(basename "$f")"
 	mkdir -p ".cache/$d"
-	install "$f" ".cache/$d/$md5-$file"
+	ln -s --relative "$f" ".cache/$d/$md5-$file"
 }
 for f in %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE16}; do
 	cache_file $f xfeatures2d/boostdesc
