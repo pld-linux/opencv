@@ -149,6 +149,7 @@ BuildRequires:	libunicap-devel
 BuildRequires:	libv4l-devel
 BuildRequires:	ogre-devel
 BuildRequires:	pkgconfig
+BuildRequires:	hdf5-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	python >= 2.0
 BuildRequires:	python-devel >= 2.0
