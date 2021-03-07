@@ -108,6 +108,7 @@ Patch2:		pkgconfig-paths.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
+BuildRequires:	Mesa-khrplatform-devel
 BuildRequires:	OpenEXR-devel
 %{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
 %{?with_opengl:BuildRequires:	OpenGL-devel}
