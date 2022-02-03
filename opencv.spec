@@ -110,7 +110,6 @@ Patch4:		gcc11.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
-BuildRequires:	Mesa-khrplatform-devel
 BuildRequires:	OpenEXR-devel
 %{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
 %{?with_opengl:BuildRequires:	OpenGL-devel}
@@ -135,6 +134,7 @@ BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %endif
 BuildRequires:	jasper-devel
 %{?with_java:BuildRequires:	jdk}
+BuildRequires:	khrplatform-devel
 BuildRequires:	libdc1394-devel >= 2
 %{?with_openmp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
