@@ -60,7 +60,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	4.5.1
-Release:	7
+Release:	7.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -107,12 +107,16 @@ Patch1:		python-install.patch
 Patch2:		pkgconfig-paths.patch
 Patch3:		no-cxx-in-c-header.patch
 Patch4:		gcc11.patch
+Patch5:		ogre2.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
 BuildRequires:	OpenEXR-devel
 %{?with_opengl:BuildRequires:	OpenGL-GLU-devel}
-%{?with_opengl:BuildRequires:	OpenGL-devel}
+%if %{with opengl}
+BuildRequires:	OpenGL-devel
+BuildRequires:	libglvnd-libGL-devel
+%endif
 # as of OpenCV 2.3.1-2.4.3 there is also check for OpenNI-sensor-PrimeSense, but the result is not used
 %{?with_openni:BuildRequires:	OpenNI-devel}
 %{?with_ximea:BuildRequires:	XIMEA-devel >= 4}
@@ -133,7 +137,10 @@ BuildRequires:	gstreamer-devel >= 1.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %endif
 BuildRequires:	jasper-devel
-%{?with_java:BuildRequires:	jdk}
+%if %{with java}
+BuildRequires:	jdk
+BuildRequires:	java-xerces
+%endif
 BuildRequires:	khrplatform-devel
 BuildRequires:	libdc1394-devel >= 2
 %{?with_openmp:BuildRequires:	libgomp-devel}
@@ -353,6 +360,9 @@ done
 cache_file %{SOURCE30} data
 cache_file %{SOURCE40} ade
 
+cd opencv_contrib-%{version}
+%patch5 -p1
+
 %build
 mkdir -p build
 cd build
@@ -370,6 +380,7 @@ fi
 
 %cmake .. \
 	$ccache \
+	-DOpenGL_GL_PREFERENCE=GLVND \
 	-DENABLE_PRECOMPILED_HEADERS=OFF \
 	-DOPENCV_LIB_INSTALL_PATH=%{_libdir} \
 	-DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-%{version}/modules \
