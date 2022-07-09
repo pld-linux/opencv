@@ -60,7 +60,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	4.5.1
-Release:	11
+Release:	12
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -362,6 +362,10 @@ cache_file %{SOURCE40} ade
 
 cd opencv_contrib-%{version}
 %patch5 -p1
+
+# both files use Glog_FOUND variable, but set different variables for LIBS; unify them so they won't disturb each other
+cp -f modules/sfm/cmake/FindGlog.cmake modules/cnn_3dobj/FindGlog.cmake
+%{__sed} -i -e 's/Glog_LIBS/GLOG_LIBRARIES/' modules/cnn_3dobj/CMakeLists.txt
 
 %build
 mkdir -p build
