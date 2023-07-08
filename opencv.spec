@@ -98,6 +98,15 @@ Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229
 # See opencv-4.5.1/modules/gapi/cmake/DownloadADE.cmake
 Source40:	https://github.com/opencv/ade/archive/v0.1.2a/ade-0.1.2a.zip
 # Source40-md5:	fa4b3e25167319cb0fa9432ef8281945
+# See opencv_contrib-4.5.5/modules/wechat_qrcode/CMakeLists.txt
+Source50:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/detect.caffemodel
+# Source50-md5:	238e2b2d6f3c18d6c3a30de0c31e23cf
+Source51:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/detect.prototxt
+# Source51-md5:	6fb4976b32695f9f5c6305c19f12537d
+Source52:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/sr.caffemodel
+# Source52-md5:	cbfcd60361a73beb8c583eea7e8e6664
+Source53:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/sr.prototxt
+# Source53-md5:	69db99927a70df953b471daaba03fbef
 Patch0:		%{name}-ximea.patch
 Patch1:		python-install.patch
 Patch2:		pkgconfig-paths.patch
@@ -350,9 +359,8 @@ cache_file() {
 	d="$2"
 	md5="$(md5sum "$f" | awk '{print $1}')"
 	file="$(basename "$f")"
-	destfile="${md5}-${3:-${file}}"
 	mkdir -p ".cache/$d"
-	ln -s --relative "$f" ".cache/$d/$destfile"
+	ln -s --relative "$f" ".cache/$d/$md5-$file"
 }
 for f in %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE16}; do
 	cache_file $f xfeatures2d/boostdesc
@@ -361,7 +369,10 @@ for f in %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23}; do
 	cache_file $f xfeatures2d/vgg
 done
 cache_file %{SOURCE30} data
-cache_file %{SOURCE40} ade v0.1.2a.zip
+cache_file %{SOURCE40} ade
+for f in %{SOURCE50} %{SOURCE51} %{SOURCE52} %{SOURCE53}; do
+	cache_file $f wechat_qrcode
+done
 
 cd opencv_contrib-%{version}
 
