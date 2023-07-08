@@ -350,8 +350,9 @@ cache_file() {
 	d="$2"
 	md5="$(md5sum "$f" | awk '{print $1}')"
 	file="$(basename "$f")"
+	destfile="${md5}-${3:-${file}}"
 	mkdir -p ".cache/$d"
-	ln -s --relative "$f" ".cache/$d/$md5-$file"
+	ln -s --relative "$f" ".cache/$d/$destfile"
 }
 for f in %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14} %{SOURCE15} %{SOURCE16}; do
 	cache_file $f xfeatures2d/boostdesc
@@ -360,7 +361,7 @@ for f in %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23}; do
 	cache_file $f xfeatures2d/vgg
 done
 cache_file %{SOURCE30} data
-cache_file %{SOURCE40} ade
+cache_file %{SOURCE40} ade v0.1.2a.zip
 
 cd opencv_contrib-%{version}
 
