@@ -165,6 +165,7 @@ BuildRequires:	python-numpy-devel
 BuildRequires:	python3 >= 1:3.2
 BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	python3-numpy-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.606
 BuildRequires:	sed >= 4.0
@@ -256,7 +257,7 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 %if %{with vtk}
 Requires:	%{name}-viz = %{epoch}:%{version}-%{release}
 %endif
-Obsoletes:	opencv-static
+Obsoletes:	opencv-static < 1:2
 
 %description devel
 Header files for OpenCV library.
@@ -270,7 +271,6 @@ Summary(fr.UTF-8):	Documentation pour OpenCV
 Summary(it.UTF-8):	Documentazione di OpenCV
 Summary(pl.UTF-8):	Podręcznik dla OpenCV
 Group:		Documentation
-# noarch subpackages only when building with rpm5
 BuildArch:	noarch
 
 %description doc
