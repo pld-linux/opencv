@@ -143,8 +143,10 @@ BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %endif
 BuildRequires:	jasper-devel
 %if %{with java}
-BuildRequires:	jdk
 BuildRequires:	java-xerces
+BuildRequires:	jdk
+# jawt for installed jdk
+BuildRequires:	jre-X11
 %endif
 BuildRequires:	khrplatform-devel
 BuildRequires:	libdc1394-devel >= 2
