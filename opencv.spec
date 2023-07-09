@@ -454,6 +454,9 @@ mv $RPM_BUILD_ROOT%{_datadir}/opencv4/samples/* $RPM_BUILD_ROOT%{_examplesdir}/%
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 
+%py3_comp $RPM_BUILD_ROOT%{py3_sitedir}
+%py3_ocomp $RPM_BUILD_ROOT%{py3_sitedir}
+
 %if %{with java}
 # move to proper directories, create symlink
 install -d $RPM_BUILD_ROOT%{_javadir}
@@ -726,6 +729,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitedir}/cv2/python-*
 %attr(755,root,root) %{py3_sitedir}/cv2/python-*/cv2.cpython-*.so
 %{py3_sitedir}/cv2/*.py
+%{py3_sitedir}/cv2/__pycache__
 %{py3_sitedir}/cv2/gapi
 %{py3_sitedir}/cv2/mat_wrapper
 %{py3_sitedir}/cv2/misc
