@@ -56,7 +56,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	4.8.1
-Release:	1.1
+Release:	0.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -96,7 +96,7 @@ Source23:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12
 Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
 # Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
 # See opencv-4.5.1/modules/gapi/cmake/DownloadADE.cmake
-Source40:	https://github.com/opencv/ade/archive/v0.1.2a/ade-0.1.2a.zip
+Source40:	https://github.com/opencv/ade/archive/v0.1.2a/v0.1.2a.zip
 # Source40-md5:	fa4b3e25167319cb0fa9432ef8281945
 # See opencv_contrib-4.5.5/modules/wechat_qrcode/CMakeLists.txt
 Source50:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/detect.caffemodel
