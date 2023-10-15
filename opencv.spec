@@ -55,8 +55,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	4.5.5
-Release:	1
+Version:	4.8.1
+Release:	1.1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -65,9 +65,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	a9782f01883fcf51451a183d05bda33d
+# Source0-md5:	7e3b6b5046e4e31226bbf4872091201c
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	073793e8085ec2490b3386e04ee20fbc
+# Source1-md5:	16a34bb3c8107e5416e86ef003d5aeb6
 # See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
 Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
 # Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
@@ -110,9 +110,6 @@ Source53:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738
 Patch0:		%{name}-ximea.patch
 Patch1:		python-install.patch
 Patch2:		pkgconfig-paths.patch
-Patch3:		no-cxx-in-c-header.patch
-Patch4:		gcc11.patch
-Patch5:		%{name}-ade.patch
 URL:		http://www.opencv.org/
 %{?with_pvapi:BuildRequires:	AVT_GigE_SDK-devel}
 %{?with_opencl:BuildRequires:	OpenCL-devel}
@@ -201,7 +198,7 @@ Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
-%define		sover	405
+%define		sover	408
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -352,9 +349,6 @@ Wiązania Pythona 3 do OpenCV.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 cache_file() {
 	f="$1"
@@ -517,8 +511,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_alphamat.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_aruco.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_aruco.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_barcode.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_barcode.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_bgsegm.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_bgsegm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_bioinspired.so.%{sover}
@@ -647,7 +639,6 @@ rm -rf $RPM_BUILD_ROOT
 # contrib
 %{_libdir}/libopencv_alphamat.so
 %{_libdir}/libopencv_aruco.so
-%{_libdir}/libopencv_barcode.so
 %{_libdir}/libopencv_bgsegm.so
 %{_libdir}/libopencv_bioinspired.so
 %{_libdir}/libopencv_ccalib.so
