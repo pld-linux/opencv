@@ -158,10 +158,10 @@ BuildRequires:	libtool
 BuildRequires:	libucil-devel
 BuildRequires:	libunicap-devel
 %endif
+BuildRequires:	hdf5-devel
 BuildRequires:	libv4l-devel
 BuildRequires:	ogre-devel
 BuildRequires:	pkgconfig
-BuildRequires:	hdf5-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	python >= 1:2.7
 BuildRequires:	python-devel >= 1:2.7
@@ -346,9 +346,9 @@ Wiązania Pythona 3 do OpenCV.
 
 %undos CMakeLists.txt
 
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 cache_file() {
 	f="$1"
