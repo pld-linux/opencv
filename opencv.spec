@@ -55,8 +55,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	4.8.1
-Release:	3
+Version:	4.11.0
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -65,9 +65,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	7e3b6b5046e4e31226bbf4872091201c
+# Source0-md5:	f35fbd46350cc677af13e198805b58f7
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	16a34bb3c8107e5416e86ef003d5aeb6
+# Source1-md5:	7dd4bc67eb67faff96ce71745a5e3abe
 # See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
 Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
 # Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
@@ -96,8 +96,8 @@ Source23:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12
 Source30:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
 # Source30-md5:	7505c44ca4eb54b4ab1e4777cb96ac05
 # See opencv-4.5.1/modules/gapi/cmake/DownloadADE.cmake
-Source40:	https://github.com/opencv/ade/archive/v0.1.2a/v0.1.2a.zip
-# Source40-md5:	fa4b3e25167319cb0fa9432ef8281945
+Source40:	https://github.com/opencv/ade/archive/v0.1.2e/v0.1.2e.zip
+# Source40-md5:	962ce79e0b95591f226431f7b5f152cd
 # See opencv_contrib-4.5.5/modules/wechat_qrcode/CMakeLists.txt
 Source50:	https://raw.githubusercontent.com/WeChatCV/opencv_3rdparty/a8b69ccc738421293254aec5ddb38bd523503252/detect.caffemodel
 # Source50-md5:	238e2b2d6f3c18d6c3a30de0c31e23cf
@@ -198,7 +198,7 @@ Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
-%define		sover	408
+%define		sover	411
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
