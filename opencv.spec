@@ -56,7 +56,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	4.11.0
-Release:	1
+Release:	2
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -163,9 +163,6 @@ BuildRequires:	libv4l-devel
 BuildRequires:	ogre-devel
 BuildRequires:	pkgconfig
 BuildRequires:	protobuf-devel
-BuildRequires:	python >= 1:2.7
-BuildRequires:	python-devel >= 1:2.7
-BuildRequires:	python-numpy-devel
 BuildRequires:	python3 >= 1:3.2
 BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	python3-numpy-devel
@@ -195,6 +192,7 @@ BuildRequires:	gtk+2-devel >= 2.0
 %{?with_opengl:BuildRequires:	gtkglext-devel >= 1.0}
 %endif
 Requires:	%{name}-core = %{epoch}:%{version}-%{release}
+Obsoletes:	python-opencv < 4.11.0-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
@@ -314,19 +312,6 @@ OpenCV Java bindings.
 
 %description -n java-opencv -l pl.UTF-8
 Wiązania Javy do OpenCV.
-
-%package -n python-opencv
-Summary:	OpenCV Python 2 bindings
-Summary(pl.UTF-8):	Wiązania Pythona 2 do OpenCV
-Group:		Libraries/Python
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python-libs >= 1:2.7
-
-%description -n python-opencv
-OpenCV Python 2 bindings.
-
-%description -n python-opencv -l pl.UTF-8
-Wiązania Pythona 2 do OpenCV.
 
 %package -n python3-opencv
 Summary:	OpenCV Python 3 bindings
@@ -705,16 +690,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_javadir}/opencv-%{jver}.jar
 %{_javadir}/opencv.jar
 %endif
-
-%files -n python-opencv
-%defattr(644,root,root,755)
-%dir %{py_sitedir}/cv2
-%dir %{py_sitedir}/cv2/python-*
-%attr(755,root,root) %{py_sitedir}/cv2/python-*/cv2.so
-%{py_sitedir}/cv2/*.py[co]
-%{py_sitedir}/cv2/mat_wrapper
-%{py_sitedir}/cv2/misc
-%{py_sitedir}/cv2/utils
 
 %files -n python3-opencv
 %defattr(644,root,root,755)
