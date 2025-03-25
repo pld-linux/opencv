@@ -472,12 +472,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_version
 %attr(755,root,root) %{_bindir}/opencv_visualisation
 %attr(755,root,root) %{_bindir}/setup_vars_opencv4.sh
-%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_dnn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_gapi.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_gapi.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_highgui.so.*.*.*
@@ -548,6 +542,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopencv_saliency.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_shape.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_shape.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_signal.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_signal.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_sfm.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_sfm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_stereo.so.%{sover}
@@ -578,8 +574,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files core
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_core.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_dnn.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn.so.%{sover}
+%attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_flann.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.%{sover}
 %attr(755,root,root) %{_libdir}/libopencv_imgcodecs.so.*.*.*
@@ -651,6 +653,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libopencv_saliency.so
 %{_libdir}/libopencv_sfm.so
 %{_libdir}/libopencv_shape.so
+%{_libdir}/libopencv_signal.so
 %{_libdir}/libopencv_stereo.so
 %{_libdir}/libopencv_superres.so
 %{_libdir}/libopencv_structured_light.so
@@ -697,8 +700,75 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitedir}/cv2/python-*
 %attr(755,root,root) %{py3_sitedir}/cv2/python-*/cv2.cpython-*.so
 %{py3_sitedir}/cv2/*.py
+%{py3_sitedir}/cv2/*.pyi
 %{py3_sitedir}/cv2/__pycache__
+%{py3_sitedir}/cv2/Error
+%{py3_sitedir}/cv2/alphamat
+%{py3_sitedir}/cv2/aruco
+%{py3_sitedir}/cv2/barcode
+%{py3_sitedir}/cv2/bgsegm
+%{py3_sitedir}/cv2/bioinspired
+%{py3_sitedir}/cv2/ccm
+%{py3_sitedir}/cv2/colored_kinfu
+%{py3_sitedir}/cv2/cuda
+%{py3_sitedir}/cv2/datasets
+%{py3_sitedir}/cv2/detail
+%{py3_sitedir}/cv2/dnn
+%{py3_sitedir}/cv2/dnn_superres
+%{py3_sitedir}/cv2/dpm
+%{py3_sitedir}/cv2/dynafu
+%{py3_sitedir}/cv2/face
+%{py3_sitedir}/cv2/fisheye
+%{py3_sitedir}/cv2/flann
+%{py3_sitedir}/cv2/freetype
+%{py3_sitedir}/cv2/ft
 %{py3_sitedir}/cv2/gapi
+%{py3_sitedir}/cv2/hdf
+%{py3_sitedir}/cv2/hfs
+%{py3_sitedir}/cv2/img_hash
+%{py3_sitedir}/cv2/intensity_transform
+%{py3_sitedir}/cv2/ipp
+%{py3_sitedir}/cv2/kinfu
+%{py3_sitedir}/cv2/large_kinfu
+%{py3_sitedir}/cv2/legacy
+%{py3_sitedir}/cv2/line_descriptor
+%{py3_sitedir}/cv2/linemod
 %{py3_sitedir}/cv2/mat_wrapper
+%{py3_sitedir}/cv2/mcc
 %{py3_sitedir}/cv2/misc
+%{py3_sitedir}/cv2/ml
+%{py3_sitedir}/cv2/motempl
+%{py3_sitedir}/cv2/multicalib
+%{py3_sitedir}/cv2/ocl
+%{py3_sitedir}/cv2/ogl
+%{py3_sitedir}/cv2/omnidir
+%{py3_sitedir}/cv2/optflow
+%{py3_sitedir}/cv2/ovis
+%{py3_sitedir}/cv2/parallel
+%{py3_sitedir}/cv2/phase_unwrapping
+%{py3_sitedir}/cv2/plot
+%{py3_sitedir}/cv2/ppf_match_3d
+%{py3_sitedir}/cv2/py.typed
+%{py3_sitedir}/cv2/quality
+%{py3_sitedir}/cv2/rapid
+%{py3_sitedir}/cv2/reg
+%{py3_sitedir}/cv2/rgbd
+%{py3_sitedir}/cv2/saliency
+%{py3_sitedir}/cv2/samples
+%{py3_sitedir}/cv2/segmentation
+%{py3_sitedir}/cv2/sfm
+%{py3_sitedir}/cv2/signal
+%{py3_sitedir}/cv2/stereo
+%{py3_sitedir}/cv2/structured_light
+%{py3_sitedir}/cv2/text
+%{py3_sitedir}/cv2/typing
 %{py3_sitedir}/cv2/utils
+%{py3_sitedir}/cv2/videoio_registry
+%{py3_sitedir}/cv2/videostab
+%if %{with vtk}
+%{py3_sitedir}/cv2/viz
+%endif
+%{py3_sitedir}/cv2/wechat_qrcode
+%{py3_sitedir}/cv2/xfeatures2d
+%{py3_sitedir}/cv2/ximgproc
+%{py3_sitedir}/cv2/xphoto
