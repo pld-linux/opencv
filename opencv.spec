@@ -32,7 +32,7 @@
 %bcond_without	openmp		# OpenMP support (available when not using tbb)
 %bcond_without	examples	# Install examples
 # - bindings
-%bcond_without	java		# Java binding
+%bcond_with	java		# Java binding
 # - highgui options:
 %bcond_without	ffmpeg		# FFMpeg support in highgui
 %bcond_without	gstreamer	# GStreamer support in highgui
@@ -55,8 +55,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	4.11.0
-Release:	5
+Version:	4.12.0
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -65,9 +65,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	f35fbd46350cc677af13e198805b58f7
+# Source0-md5:	eb6f8ff4f4cd16ef1b97bc21edc74de9
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	7dd4bc67eb67faff96ce71745a5e3abe
+# Source1-md5:	55603c033cc5f3d5e307b699ad72e25a
 # See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
 Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
 # Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
@@ -176,7 +176,9 @@ BuildRequires:	swig-python
 BuildRequires:	tesseract-devel
 %if %{with vtk}
 BuildRequires:	vtk-devel >= 5.8.0
+%if %{with java}
 BuildRequires:	vtk-java >= 5.8.0
+%endif
 BuildRequires:	vtk-python3-devel >= 5.8.0
 %endif
 %{?with_xine:BuildRequires:	xine-lib-devel}
@@ -188,15 +190,14 @@ BuildRequires:	QtGui-devel >= 4
 %{?with_opengl:BuildRequires:	QtOpenGL-devel >= 4}
 BuildRequires:	qt4-qmake >= 4
 %else
-BuildRequires:	gtk+2-devel >= 2.0
-%{?with_opengl:BuildRequires:	gtkglext-devel >= 1.0}
+BuildRequires:	gtk+3-devel
 %endif
 Requires:	%{name}-core = %{epoch}:%{version}-%{release}
 Obsoletes:	python-opencv < 4.11.0-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
-%define		sover	411
+%define		sover	412
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
@@ -331,9 +332,9 @@ Wiązania Pythona 3 do OpenCV.
 
 %undos CMakeLists.txt
 
-%patch -P 0 -p1
-%patch -P 1 -p1
-%patch -P 2 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 cache_file() {
 	f="$1"
@@ -350,7 +351,6 @@ for f in %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23}; do
 	cache_file $f xfeatures2d/vgg
 done
 cache_file %{SOURCE30} data
-cache_file %{SOURCE40} ade
 for f in %{SOURCE50} %{SOURCE51} %{SOURCE52} %{SOURCE53}; do
 	cache_file $f wechat_qrcode
 done
@@ -376,8 +376,6 @@ if [[ "%{__cc}" = *ccache* ]]; then
 	"
 fi
 
-# WITH_GTK_2_X=ON: force gtk+2 instead of gtk+3
-# (as of 4.5.5, OpenGL is not supported with gtk+3, leading to highgui linking errors)
 %cmake .. \
 	$ccache \
 	-DOpenGL_GL_PREFERENCE=GLVND \
@@ -399,7 +397,7 @@ fi
 %endif
 	%{?with_ffmpeg:-DWITH_FFMPEG=ON} \
 	%{!?with_gstreamer:-DWITH_GSTREAMER=OFF} \
-	-DWITH_GTK_2_X=ON \
+	-DWITH_GTK=ON \
 	%{?with_opencl:-DWITH_OPENCL=ON} \
 	%{!?with_opencl_amdblas:-DWITH_OPENCLAMDBLAS=OFF} \
 	%{!?with_opencl_amdfft:-DWITH_OPENCLAMDFFT=OFF} \
@@ -472,100 +470,100 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/opencv_version
 %attr(755,root,root) %{_bindir}/opencv_visualisation
 %attr(755,root,root) %{_bindir}/setup_vars_opencv4.sh
-%attr(755,root,root) %{_libdir}/libopencv_gapi.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_gapi.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_highgui.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_highgui.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_objdetect.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_objdetect.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_stitching.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_stitching.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_superres.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_superres.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_videostab.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_videostab.so.%{sover}
+%{_libdir}/libopencv_gapi.so.*.*.*
+%ghost %{_libdir}/libopencv_gapi.so.%{sover}
+%{_libdir}/libopencv_highgui.so.*.*.*
+%ghost %{_libdir}/libopencv_highgui.so.%{sover}
+%{_libdir}/libopencv_objdetect.so.*.*.*
+%ghost %{_libdir}/libopencv_objdetect.so.%{sover}
+%{_libdir}/libopencv_stitching.so.*.*.*
+%ghost %{_libdir}/libopencv_stitching.so.%{sover}
+%{_libdir}/libopencv_superres.so.*.*.*
+%ghost %{_libdir}/libopencv_superres.so.%{sover}
+%{_libdir}/libopencv_videostab.so.*.*.*
+%ghost %{_libdir}/libopencv_videostab.so.%{sover}
 # contrib modules
 %attr(755,root,root) %{_bindir}/opencv_waldboost_detector
-%attr(755,root,root) %ghost %{_libdir}/libopencv_alphamat.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_alphamat.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_aruco.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_aruco.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_bgsegm.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_bgsegm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_bioinspired.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_bioinspired.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ccalib.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_ccalib.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_datasets.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_datasets.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn_objdetect.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_dnn_objdetect.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn_superres.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_dnn_superres.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_dpm.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_dpm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_face.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_face.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_freetype.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_freetype.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_fuzzy.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_fuzzy.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_hdf.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_hdf.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_hfs.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_hfs.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_img_hash.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_img_hash.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_intensity_transform.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_intensity_transform.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_line_descriptor.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_line_descriptor.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_mcc.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_mcc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ovis.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_ovis.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_optflow.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_optflow.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_phase_unwrapping.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_phase_unwrapping.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_plot.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_plot.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_quality.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_quality.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_rapid.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_rapid.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_reg.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_reg.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_rgbd.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_rgbd.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_saliency.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_saliency.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_shape.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_shape.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_signal.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_signal.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_sfm.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_sfm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_stereo.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_stereo.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_structured_light.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_structured_light.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_surface_matching.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_surface_matching.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_text.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_text.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_tracking.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_tracking.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_wechat_qrcode.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_wechat_qrcode.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_xfeatures2d.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_xfeatures2d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ximgproc.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_ximgproc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_xobjdetect.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_xobjdetect.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_xphoto.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_xphoto.so.*.*.*
+%ghost %{_libdir}/libopencv_alphamat.so.%{sover}
+%{_libdir}/libopencv_alphamat.so.*.*.*
+%ghost %{_libdir}/libopencv_aruco.so.%{sover}
+%{_libdir}/libopencv_aruco.so.*.*.*
+%ghost %{_libdir}/libopencv_bgsegm.so.%{sover}
+%{_libdir}/libopencv_bgsegm.so.*.*.*
+%ghost %{_libdir}/libopencv_bioinspired.so.%{sover}
+%{_libdir}/libopencv_bioinspired.so.*.*.*
+%ghost %{_libdir}/libopencv_ccalib.so.%{sover}
+%{_libdir}/libopencv_ccalib.so.*.*.*
+%ghost %{_libdir}/libopencv_datasets.so.%{sover}
+%{_libdir}/libopencv_datasets.so.*.*.*
+%ghost %{_libdir}/libopencv_dnn_objdetect.so.%{sover}
+%{_libdir}/libopencv_dnn_objdetect.so.*.*.*
+%ghost %{_libdir}/libopencv_dnn_superres.so.%{sover}
+%{_libdir}/libopencv_dnn_superres.so.*.*.*
+%ghost %{_libdir}/libopencv_dpm.so.%{sover}
+%{_libdir}/libopencv_dpm.so.*.*.*
+%ghost %{_libdir}/libopencv_face.so.%{sover}
+%{_libdir}/libopencv_face.so.*.*.*
+%ghost %{_libdir}/libopencv_freetype.so.%{sover}
+%{_libdir}/libopencv_freetype.so.*.*.*
+%ghost %{_libdir}/libopencv_fuzzy.so.%{sover}
+%{_libdir}/libopencv_fuzzy.so.*.*.*
+%ghost %{_libdir}/libopencv_hdf.so.%{sover}
+%{_libdir}/libopencv_hdf.so.*.*.*
+%ghost %{_libdir}/libopencv_hfs.so.%{sover}
+%{_libdir}/libopencv_hfs.so.*.*.*
+%ghost %{_libdir}/libopencv_img_hash.so.%{sover}
+%{_libdir}/libopencv_img_hash.so.*.*.*
+%ghost %{_libdir}/libopencv_intensity_transform.so.%{sover}
+%{_libdir}/libopencv_intensity_transform.so.*.*.*
+%ghost %{_libdir}/libopencv_line_descriptor.so.%{sover}
+%{_libdir}/libopencv_line_descriptor.so.*.*.*
+%ghost %{_libdir}/libopencv_mcc.so.%{sover}
+%{_libdir}/libopencv_mcc.so.*.*.*
+%ghost %{_libdir}/libopencv_ovis.so.%{sover}
+%{_libdir}/libopencv_ovis.so.*.*.*
+%ghost %{_libdir}/libopencv_optflow.so.%{sover}
+%{_libdir}/libopencv_optflow.so.*.*.*
+%ghost %{_libdir}/libopencv_phase_unwrapping.so.%{sover}
+%{_libdir}/libopencv_phase_unwrapping.so.*.*.*
+%ghost %{_libdir}/libopencv_plot.so.%{sover}
+%{_libdir}/libopencv_plot.so.*.*.*
+%ghost %{_libdir}/libopencv_quality.so.%{sover}
+%{_libdir}/libopencv_quality.so.*.*.*
+%ghost %{_libdir}/libopencv_rapid.so.%{sover}
+%{_libdir}/libopencv_rapid.so.*.*.*
+%ghost %{_libdir}/libopencv_reg.so.%{sover}
+%{_libdir}/libopencv_reg.so.*.*.*
+%ghost %{_libdir}/libopencv_rgbd.so.%{sover}
+%{_libdir}/libopencv_rgbd.so.*.*.*
+%ghost %{_libdir}/libopencv_saliency.so.%{sover}
+%{_libdir}/libopencv_saliency.so.*.*.*
+%ghost %{_libdir}/libopencv_shape.so.%{sover}
+%{_libdir}/libopencv_shape.so.*.*.*
+%ghost %{_libdir}/libopencv_signal.so.%{sover}
+%{_libdir}/libopencv_signal.so.*.*.*
+%ghost %{_libdir}/libopencv_sfm.so.%{sover}
+%{_libdir}/libopencv_sfm.so.*.*.*
+%ghost %{_libdir}/libopencv_stereo.so.%{sover}
+%{_libdir}/libopencv_stereo.so.*.*.*
+%ghost %{_libdir}/libopencv_structured_light.so.%{sover}
+%{_libdir}/libopencv_structured_light.so.*.*.*
+%ghost %{_libdir}/libopencv_surface_matching.so.%{sover}
+%{_libdir}/libopencv_surface_matching.so.*.*.*
+%ghost %{_libdir}/libopencv_text.so.%{sover}
+%{_libdir}/libopencv_text.so.*.*.*
+%ghost %{_libdir}/libopencv_tracking.so.%{sover}
+%{_libdir}/libopencv_tracking.so.*.*.*
+%ghost %{_libdir}/libopencv_wechat_qrcode.so.%{sover}
+%{_libdir}/libopencv_wechat_qrcode.so.*.*.*
+%ghost %{_libdir}/libopencv_xfeatures2d.so.%{sover}
+%{_libdir}/libopencv_xfeatures2d.so.*.*.*
+%ghost %{_libdir}/libopencv_ximgproc.so.%{sover}
+%{_libdir}/libopencv_ximgproc.so.*.*.*
+%ghost %{_libdir}/libopencv_xobjdetect.so.%{sover}
+%{_libdir}/libopencv_xobjdetect.so.*.*.*
+%ghost %{_libdir}/libopencv_xphoto.so.%{sover}
+%{_libdir}/libopencv_xphoto.so.*.*.*
 
 %dir %{_datadir}/opencv4
 %{_datadir}/opencv4/haarcascades
@@ -574,34 +572,34 @@ rm -rf $RPM_BUILD_ROOT
 
 %files core
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_calib3d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_calib3d.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_core.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_core.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_dnn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_dnn.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_features2d.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_features2d.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_flann.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_flann.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_imgcodecs.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_imgcodecs.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_imgproc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_imgproc.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_ml.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_ml.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_photo.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_photo.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_video.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_video.so.%{sover}
-%attr(755,root,root) %{_libdir}/libopencv_videoio.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_videoio.so.%{sover}
+%{_libdir}/libopencv_calib3d.so.*.*.*
+%ghost %{_libdir}/libopencv_calib3d.so.%{sover}
+%{_libdir}/libopencv_core.so.*.*.*
+%ghost %{_libdir}/libopencv_core.so.%{sover}
+%{_libdir}/libopencv_dnn.so.*.*.*
+%ghost %{_libdir}/libopencv_dnn.so.%{sover}
+%{_libdir}/libopencv_features2d.so.*.*.*
+%ghost %{_libdir}/libopencv_features2d.so.%{sover}
+%{_libdir}/libopencv_flann.so.*.*.*
+%ghost %{_libdir}/libopencv_flann.so.%{sover}
+%{_libdir}/libopencv_imgcodecs.so.*.*.*
+%ghost %{_libdir}/libopencv_imgcodecs.so.%{sover}
+%{_libdir}/libopencv_imgproc.so.*.*.*
+%ghost %{_libdir}/libopencv_imgproc.so.%{sover}
+%{_libdir}/libopencv_ml.so.*.*.*
+%ghost %{_libdir}/libopencv_ml.so.%{sover}
+%{_libdir}/libopencv_photo.so.*.*.*
+%ghost %{_libdir}/libopencv_photo.so.%{sover}
+%{_libdir}/libopencv_video.so.*.*.*
+%ghost %{_libdir}/libopencv_video.so.%{sover}
+%{_libdir}/libopencv_videoio.so.*.*.*
+%ghost %{_libdir}/libopencv_videoio.so.%{sover}
 
 %if %{with vtk}
 %files viz
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_viz.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libopencv_viz.so.%{sover}
+%{_libdir}/libopencv_viz.so.*.*.*
+%ghost %{_libdir}/libopencv_viz.so.%{sover}
 %endif
 
 %files devel
@@ -689,7 +687,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with java}
 %files -n java-opencv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libopencv_java%{jver}.so
+%{_libdir}/libopencv_java%{jver}.so
 %{_javadir}/opencv-%{jver}.jar
 %{_javadir}/opencv.jar
 %endif
