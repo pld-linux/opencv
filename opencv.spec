@@ -355,6 +355,9 @@ for f in %{SOURCE50} %{SOURCE51} %{SOURCE52} %{SOURCE53}; do
 	cache_file $f wechat_qrcode
 done
 
+mkdir -p build/3rdparty/ade
+unzip %{SOURCE40} -d build/3rdparty/ade
+
 cd opencv_contrib-%{version}
 
 # both files use Glog_FOUND variable, but set different variables for LIBS; unify them so they won't disturb each other
