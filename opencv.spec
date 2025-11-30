@@ -354,9 +354,7 @@ cache_file %{SOURCE30} data
 for f in %{SOURCE50} %{SOURCE51} %{SOURCE52} %{SOURCE53}; do
 	cache_file $f wechat_qrcode
 done
-
-mkdir -p build/3rdparty/ade
-unzip %{SOURCE40} -d build/3rdparty/ade
+cache_file %{SOURCE40} ade
 
 cd opencv_contrib-%{version}
 
