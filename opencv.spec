@@ -3,13 +3,14 @@
 # - contrib BRs:
 #   opencv_contrib-3.1.0/modules/cnn_3dobj/CMakeLists.txt:find_package(Caffe)
 #   opencv_contrib-3.1.0/modules/sfm/CMakeLists.txt:find_package(Ceres QUIET)
-# unpackaged (4.5.5)
-#/usr/share/OpenCV/3rdparty/usr/lib64/libcorrespondence.a
-#/usr/share/OpenCV/3rdparty/usr/lib64/libmultiview.a
-#/usr/share/OpenCV/3rdparty/usr/lib64/libnumeric.a
-#/usr/share/OpenCV/valgrind.supp
-#/usr/share/OpenCV/valgrind_3rdparty.supp
-
+# unpackaged (4.12.0)
+#   /usr/lib/opencv4/3rdparty/libopencv.sfm.correspondence.a
+#   /usr/lib/opencv4/3rdparty/libopencv.sfm.multiview.a
+#   /usr/lib/opencv4/3rdparty/libopencv.sfm.numeric.a
+#   /usr/share/java/opencv4/libopencv_java4120.so
+#   /usr/share/java/opencv4/opencv-4120.jar
+#   /usr/share/opencv4/valgrind.supp
+#   /usr/share/opencv4/valgrind_3rdparty.supp
 #
 # - Smartek GigEVisionSDK (http://www.smartekvision.com/ but I can't see SDK with Linux library?)
 # - CUDA, CUFFT, CUBLAS, NVCUVID support (on bcond)
@@ -56,7 +57,7 @@ Summary:	A library of programming functions mainly aimed at real time computer v
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
 Version:	4.12.0
-Release:	1
+Release:	2
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
