@@ -56,8 +56,8 @@
 Summary:	A library of programming functions mainly aimed at real time computer vision
 Summary(pl.UTF-8):	Biblioteka funkcji do grafiki komputerowej w czasie rzeczywistym
 Name:		opencv
-Version:	4.12.0
-Release:	2
+Version:	4.14.0
+Release:	1
 Epoch:		1
 %if %{with unicap} || %{with xine}
 License:	GPL (enforced by used libraries), BSD (opencv itself)
@@ -66,9 +66,9 @@ License:	BSD
 %endif
 Group:		Libraries
 Source0:	https://github.com/Itseez/opencv/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	eb6f8ff4f4cd16ef1b97bc21edc74de9
+# Source0-md5:	5b382fc2e99fb7c1eb2b929b0c447ed4
 Source1:	https://github.com/Itseez/opencv_contrib/archive/%{version}/%{name}_contrib-%{version}.tar.gz
-# Source1-md5:	55603c033cc5f3d5e307b699ad72e25a
+# Source1-md5:	773c8306ce1fba536e6bf16a406e769f
 # See opencv_contrib-3.4.1/modules/xfeatures2d/cmake/download_boostdesc.cmake
 Source10:	https://raw.githubusercontent.com/opencv/opencv_3rdparty/34e4206aef44d50e6bbcd0ab06354b52e7466d26/boostdesc_bgm.i
 # Source10-md5:	0ea90e7a8f3f7876d450e4149c97c74f
@@ -366,6 +366,8 @@ cp -f modules/sfm/cmake/FindGlog.cmake modules/cnn_3dobj/FindGlog.cmake
 %build
 mkdir -p build
 cd build
+
+export CXXFLAGS="%{rpmcxxflags} -DNDEBUG"
 
 # handle cmake & ccache
 # http://stackoverflow.com/questions/1815688/how-to-use-ccache-with-cmakec
