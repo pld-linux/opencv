@@ -198,7 +198,7 @@ Obsoletes:	python-opencv < 4.11.0-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		jver	%(echo %{version} | cut -d. -f1-3 | tr -d .)
-%define		sover	412
+%define		sover	414
 
 %description
 OpenCV (Open Source Computer Vision) is a library of programming
