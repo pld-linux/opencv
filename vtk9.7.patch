@@ -1,0 +1,48 @@
+diff --git a/modules/viz/src/vtk/vtkVizInteractorStyle.cpp b/modules/viz/src/vtk/vtkVizInteractorStyle.cpp
+index e2d33806..8943cb9f 100644
+--- a/modules/viz/src/vtk/vtkVizInteractorStyle.cpp
++++ b/modules/viz/src/vtk/vtkVizInteractorStyle.cpp
+@@ -44,6 +44,7 @@
+ //M*/
+ 
+ #include "../precomp.hpp"
++#include <iostream>
+ 
+ namespace cv { namespace viz
+ {
+@@ -96,7 +97,7 @@ void cv::viz::vtkVizInteractorStyle::saveScreenshot(const String &file)
+     snapshot_writer->SetFileName(file.c_str());
+     snapshot_writer->Write();
+ 
+-    cout << "Screenshot successfully captured (" << file.c_str() << ")" << endl;
++    std::cout << "Screenshot successfully captured (" << file.c_str() << ")" << endl;
+ }
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////////
+@@ -118,7 +119,7 @@ void cv::viz::vtkVizInteractorStyle::exportScene(const String &file)
+     exporter->SetInput(Interactor->GetRenderWindow());
+     exporter->Write();
+ 
+-    cout << "Scene successfully exported (" << file.c_str() << ")" << endl;
++    std::cout << "Scene successfully exported (" << file.c_str() << ")" << endl;
+ }
+ 
+ void cv::viz::vtkVizInteractorStyle::exportScene()
+commit fe8a6898e5c013be30ae9216e0a43b42aa9bfc78
+Author: Orion Poplawski <orion@nwra.com>
+Date:   Wed Feb 25 20:51:05 2026 -0700
+
+    Include iostream for cerr in widget.cpp
+
+diff --git a/modules/viz/src/widget.cpp b/modules/viz/src/widget.cpp
+index b46d3d1c..44ce4d5c 100644
+--- a/modules/viz/src/widget.cpp
++++ b/modules/viz/src/widget.cpp
+@@ -44,6 +44,7 @@
+ //M*/
+ 
+ #include "precomp.hpp"
++#include <iostream>
+ 
+ ///////////////////////////////////////////////////////////////////////////////////////////////
+ /// widget implementation
